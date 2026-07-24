@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Quản lý Cơ cấu tổ chức</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Quản lý Cơ cấu tổ chức</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <!-- =====================================================
+         QUẢN LÝ CẤP BẬC (vd: Ban chỉ huy, Ủy viên, Đội viên...)
+         Cấp càng ở TRÊN trong danh sách này = cấp càng CAO,
+         hiển thị càng lên trên ở trang công khai.
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Quản lý cấp bậc</h2>
+      <p class="admin-hint">
+        💡 Tạo các cấp bậc trước (VD: "Ban chỉ huy", "Ủy viên", "Đội viên"), sau đó khi thêm/sửa chức vụ ở dưới, chọn đúng cấp cho chức vụ đó. Dùng nút ▲▼ để đổi cấp nào hiển thị cao hơn. Thẻ ở trang công khai sẽ TỰ ĐỘNG to/nhỏ theo thứ tự này — hoặc bạn có thể tự chọn size riêng ở ô "Kích thước thẻ" nếu muốn khác đi.
+      </p>
+
+      <form id="addLevelForm" class="admin-level-add-form">
+        <input type="text" id="newLevelName" placeholder="VD: Ban chỉ huy" required />
+        <button type="submit" class="btn btn-primary">+ Thêm cấp bậc</button>
+      </form>
+
+      <div id="levelsList" class="admin-levels-list">
+        <p class="loading-text">Đang tải danh sách cấp bậc...</p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         FORM THÊM CHỨC VỤ MỚI
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Thêm chức vụ mới</h2>
+
+      <form id="addPositionForm" class="admin-form">
+        <label for="newTitle">Chức danh <span class="required">*</span></label>
+        <input type="text" id="newTitle" placeholder="VD: Đội trưởng" required />
+
+        <label for="newLevel">Cấp bậc</label>
+        <select id="newLevel">
+          <option value="">-- Chưa phân cấp --</option>
+        </select>
+
+        <label for="newName">Tên người giữ chức vụ</label>
+        <input type="text" id="newName" placeholder="VD: Nguyễn Văn A" />
+
+        <label for="newBio">Giới thiệu ngắn (không bắt buộc)</label>
+        <textarea id="newBio" rows="3" placeholder="Vài dòng giới thiệu về bản thân..."></textarea>
+
+        <label for="newImage">Ảnh đại diện (không bắt buộc)</label>
+        <input type="file" id="newImage" accept="image/*" />
+
+        <button type="submit" class="btn btn-primary" id="addBtn">+ Thêm chức vụ</button>
+      </form>
+
+      <!-- Hiện thông báo thành công/lỗi sau khi thêm -->
+      <p id="addMessage" class="admin-message" hidden></p>
+    </section>
+
+    <!-- =====================================================
+         DANH SÁCH CHỨC VỤ HIỆN CÓ (sửa/xóa được trực tiếp)
+         Được GOM NHÓM theo cấp bậc để dễ quản lý khi có nhiều
+         chức vụ và nhiều cấp.
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Danh sách chức vụ</h2>
+      <p class="admin-hint">
+        💡 Sửa trực tiếp trong ô rồi bấm "Lưu" ở đúng dòng đó. Dùng ▲▼ để đổi thứ tự hiển thị GIỮA các chức vụ CÙNG một cấp bậc. Muốn đổi ảnh, chọn file mới rồi bấm "Lưu".
+      </p>
+
+      <!-- Nội dung bên trong do JS render từ bảng org_positions trong Supabase -->
+      <div id="positionsList" class="admin-positions-list">
+        <p class="loading-text">Đang tải danh sách...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Thứ tự nạp JS: Supabase CDN → config → auth-guard (kiểm tra đăng
+       nhập ngay) → admin-org.js (logic riêng của trang này) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+  <script src="js/image-picker.js"></script>
+  <script src="js/admin-org.js"></script>
+</body>
+</html>

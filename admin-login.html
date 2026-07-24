@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Đăng nhập</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/LOGO-ĐTNXK-favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Trang đăng nhập KHÔNG dùng header/nav đầy đủ như các trang
+       khác, vì đây là khu vực RIÊNG cho Admin, không cần menu công khai -->
+  <main class="auth-page">
+    <div class="auth-box">
+      <h1 class="auth-title">Đăng nhập</h1>
+      <p class="auth-subtitle">Đội Thanh Niên Xung Kích</p>
+
+      <!-- Nơi hiển thị thông báo lỗi (VD: sai mật khẩu) -->
+      <p id="loginError" class="auth-error" hidden></p>
+
+      <form id="loginForm" class="auth-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="username" />
+
+        <label for="password">Mật khẩu</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password" />
+
+        <!-- Tích vào để lần sau tự động điền sẵn email (KHÔNG lưu
+             mật khẩu — trình duyệt sẽ tự đề nghị lưu mật khẩu riêng,
+             an toàn hơn nhiều so với việc code tự lưu mật khẩu) -->
+        <label class="remember-me-label">
+          <input type="checkbox" id="rememberMe" />
+          Ghi nhớ đăng nhập (lần sau tự điền email)
+        </label>
+
+        <button type="submit" class="btn btn-primary" id="loginBtn">Đăng nhập</button>
+      </form>
+
+      <a href="index.html" class="auth-back-link">← Quay về trang chủ</a>
+    </div>
+  </main>
+
+  <!-- =====================================================
+       THƯ VIỆN SUPABASE (nạp từ CDN)
+       Phải nạp trước supabase-config.js, vì file đó cần biến
+       "window.supabase" mà thư viện này tạo ra.
+       ===================================================== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-login.js"></script>
+</body>
+</html>

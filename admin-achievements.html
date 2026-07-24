@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Quản lý Thành tích</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Quản lý Thành tích</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <section class="admin-section">
+      <h2 class="section-title">Thêm thành tích mới</h2>
+
+      <form id="addAchievementForm" class="admin-form">
+        <label for="newTitle">Tên thành tích <span class="required">*</span></label>
+        <input type="text" id="newTitle" placeholder="VD: Giải Nhất Hội thi Tình nguyện viên" required />
+
+        <label for="newYear">Năm đạt được</label>
+        <input type="text" id="newYear" placeholder="VD: 2025" />
+
+        <label for="newDescription">Mô tả</label>
+        <textarea id="newDescription" rows="3" placeholder="Chi tiết về thành tích..."></textarea>
+
+        <label for="newImage">Ảnh minh chứng/bằng khen (không bắt buộc, chọn được nhiều ảnh)</label>
+        <input type="file" id="newImage" accept="image/*" multiple />
+
+        <label>Nội dung chi tiết (hiển thị khi bấm xem chi tiết, thêm từng khối chữ/ảnh theo đúng thứ tự mong muốn)</label>
+        <div class="content-blocks-editor" id="newContentBlocksEditor">
+          <div class="content-blocks-list"></div>
+          <div class="content-blocks-toolbar">
+            <button type="button" class="btn btn-outline-dark btn-add-text-block">+ Thêm khối chữ</button>
+            <label class="btn btn-outline-dark btn-add-image-block-label">
+              + Thêm khối ảnh
+              <input type="file" accept="image/*" multiple class="btn-add-image-block-input" hidden />
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="addBtn">+ Thêm thành tích</button>
+      </form>
+
+      <p id="addMessage" class="admin-message" hidden></p>
+    </section>
+
+    <section class="admin-section">
+      <h2 class="section-title">Danh sách thành tích</h2>
+      <p class="admin-hint">
+        💡 Sửa trực tiếp trong ô rồi bấm "Lưu" ở đúng dòng đó. Muốn đổi ảnh, chọn file mới rồi bấm "Lưu".
+      </p>
+
+      <div id="achievementsList" class="admin-positions-list">
+        <p class="loading-text">Đang tải danh sách...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+  <script src="js/image-picker.js"></script>
+  <script src="js/content-blocks-editor.js"></script>
+  <script src="js/admin-achievements.js"></script>
+</body>
+</html>

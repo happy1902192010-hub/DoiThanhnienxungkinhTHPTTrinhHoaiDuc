@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Admin Dashboard</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/LOGO-ĐTNXK-favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Header RIÊNG cho khu vực Admin — khác với header công khai,
+       có thêm nút Đăng xuất, KHÔNG có menu công khai/tìm kiếm -->
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <span class="admin-header-title">🛠️ Admin Dashboard</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+    <h1 class="section-title">Chọn mục quản lý</h1>
+
+    <!-- Mỗi "thẻ" (card) dẫn tới 1 trang quản trị riêng.
+         Hiện tại chỉ "Cơ cấu tổ chức" có chức năng thật (kết nối
+         Supabase). Các mục khác là CHỖ TRỐNG (placeholder) để làm
+         tiếp sau — bấm vào sẽ không có gì vì trang chưa tồn tại. -->
+    <div class="admin-cards-grid">
+      <a href="admin-org.html" class="admin-card">
+        <span class="admin-card-icon">🏛️</span>
+        <h2>Cơ cấu tổ chức</h2>
+        <p>Thêm, sửa, xóa chức vụ và ảnh đại diện</p>
+      </a>
+
+      <a href="admin-about.html" class="admin-card">
+        <span class="admin-card-icon">📖</span>
+        <h2>Trang Giới thiệu</h2>
+        <p>Sửa Lịch sử thành lập và Mục tiêu hoạt động</p>
+      </a>
+
+      <a href="admin-advisors.html" class="admin-card">
+        <span class="admin-card-icon">🧑‍🏫</span>
+        <h2>Giáo viên cố vấn</h2>
+        <p>Thêm, sửa, xóa thông tin giáo viên cố vấn</p>
+      </a>
+
+      <a href="admin-leadership.html" class="admin-card">
+        <span class="admin-card-icon">👥</span>
+        <h2>Các đời chỉ huy</h2>
+        <p>Thêm, sửa, xóa nhiệm kỳ và chỉ huy trưởng</p>
+      </a>
+
+      <a href="admin-achievements.html" class="admin-card">
+        <span class="admin-card-icon">🏆</span>
+        <h2>Thành tích</h2>
+        <p>Thêm, sửa, xóa thành tích của Đội (trang Giới thiệu)</p>
+      </a>
+
+      <a href="admin-news.html" class="admin-card">
+        <span class="admin-card-icon">📰</span>
+        <h2>Tin tức</h2>
+        <p>Đăng, sửa, xóa bài viết và hình ảnh</p>
+      </a>
+
+      <a href="admin-events.html" class="admin-card">
+        <span class="admin-card-icon">📅</span>
+        <h2>Sự kiện</h2>
+        <p>Tạo sự kiện, xem danh sách đăng ký tham gia</p>
+      </a>
+
+      <a href="admin-stats.html" class="admin-card">
+        <span class="admin-card-icon">📊</span>
+        <h2>Thống kê</h2>
+        <p>Số lượng thành viên, quản lý thư viện ảnh</p>
+      </a>
+
+      <a href="admin-announcements.html" class="admin-card">
+        <span class="admin-card-icon">📢</span>
+        <h2>Thông báo nổi bật</h2>
+        <p>Thêm, sửa, xóa thông báo hiển thị ở Trang chủ</p>
+      </a>
+
+      <a href="admin-contact.html" class="admin-card">
+        <span class="admin-card-icon">✉️</span>
+        <h2>Tin nhắn liên hệ</h2>
+        <p>Xem tin nhắn khách gửi từ trang Liên hệ</p>
+      </a>
+    </div>
+  </main>
+
+  <!-- =====================================================
+       THỨ TỰ NẠP JS BẮT BUỘC:
+       1. Thư viện Supabase (CDN)
+       2. supabase-config.js  → tạo biến supabaseClient
+       3. admin-auth-guard.js → KIỂM TRA đăng nhập ngay lập tức,
+                                 đá về admin-login.html nếu chưa
+                                 đăng nhập. Đây là lý do trang này
+                                 an toàn dù URL có thể đoán được.
+       ===================================================== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+</body>
+</html>

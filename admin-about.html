@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Quản lý trang Giới thiệu</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Quản lý trang Giới thiệu</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <!-- =====================================================
+         PHẦN 1: NGƯỜI SÁNG LẬP
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Lịch sử thành lập</h2>
+
+      <form id="founderForm" class="admin-form">
+        <label for="founderName">Tên người sáng lập</label>
+        <input type="text" id="founderName" placeholder="VD: Nguyễn Văn A" />
+
+        <label for="foundedYear">Năm thành lập</label>
+        <input type="text" id="foundedYear" placeholder="VD: 2020" />
+
+        <label for="founderDescription">Mô tả bối cảnh thành lập</label>
+        <textarea id="founderDescription" rows="4" placeholder="Vài dòng giới thiệu về bối cảnh và lý do thành lập Đội..."></textarea>
+
+        <button type="submit" class="btn btn-primary" id="saveFounderBtn">💾 Lưu Lịch sử thành lập</button>
+      </form>
+
+      <p id="founderMessage" class="admin-message" hidden></p>
+    </section>
+
+    <!-- =====================================================
+         PHẦN 2: MỤC TIÊU HOẠT ĐỘNG
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Mục tiêu hoạt động</h2>
+      <p class="admin-hint">💡 Mỗi dòng là 1 mục tiêu riêng (xuống dòng bằng phím Enter).</p>
+
+      <form id="goalsForm" class="admin-form">
+        <label for="goalsTextarea">Danh sách mục tiêu</label>
+        <textarea id="goalsTextarea" rows="6" placeholder="VD:&#10;Rèn luyện kỹ năng, bản lĩnh cho thanh niên&#10;Lan tỏa tinh thần tình nguyện vì cộng đồng"></textarea>
+
+        <button type="submit" class="btn btn-primary" id="saveGoalsBtn">💾 Lưu Mục tiêu hoạt động</button>
+      </form>
+
+      <p id="goalsMessage" class="admin-message" hidden></p>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="js/admin-about.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Chỉ huy qua các nhiệm kỳ</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/LOGO-ĐTNXK-favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- =====================================================
+       HEADER / NAV
+       LƯU Ý: Khối này PHẢI giống hệt index.html để menu đồng
+       bộ trên mọi trang. Nếu sau này sửa menu ở 1 trang, nhớ
+       sửa TẤT CẢ các trang khác cho khớp (hoặc báo mình để
+       mình cập nhật đồng loạt).
+       ===================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo-link">
+        <img src="assets/LOGO-ĐTNXK.png" alt="Logo Đội TNXK" class="logo-img" />
+        <span class="site-name">
+          Đội TNXK
+          <small class="slogan">Xung kích - Sáng tạo - Đoàn kết</small>
+        </span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Mở menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-list">
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="gioi-thieu.html">Giới thiệu</a></li>
+          <li><a href="chi-huy-qua-cac-nhiem-ky.html" class="active">Các đời chỉ huy</a></li>
+          <li><a href="co-cau-to-chuc.html">Cơ cấu tổ chức</a></li>
+          <li><a href="tin-tuc.html">Tin tức</a></li>
+          <li><a href="su-kien.html">Sự kiện</a></li>
+          <li><a href="thu-vien.html">Thư viện ảnh</a></li>
+          <li><a href="lien-he.html">Liên hệ</a></li>
+          <li class="auth-control" id="authControl">
+            <a href="admin-login.html" class="login-link" id="loginLink">Đăng nhập</a>
+          </li>
+        </ul>
+
+        <form class="search-form" id="searchForm" role="search">
+          <input
+            type="search"
+            id="searchInput"
+            name="q"
+            placeholder="Tìm kiếm tin tức..."
+            aria-label="Tìm kiếm tin tức"
+          />
+          <button type="submit" aria-label="Tìm kiếm">🔍</button>
+        </form>
+
+      </nav>
+    </div>
+  </header>
+
+  <!-- Banner nhỏ gọn, chỉ để giới thiệu tên trang -->
+  <section class="page-banner">
+    <div class="container">
+      <h1>Chỉ huy qua các nhiệm kỳ</h1>
+    </div>
+  </section>
+
+  <main class="container">
+
+    <!-- =====================================================
+         DANH SÁCH CHỈ HUY, GOM NHÓM THEO TỪNG NHIỆM KỲ
+         (nhóm theo term_name + period). Mỗi nhóm là 1 section
+         có id riêng (VD: #nk-2025-2026) để trang Giới thiệu có
+         thể dẫn thẳng đến đúng nhiệm kỳ khi bấm vào 1 ô.
+         Nội dung bên trong do JS render — xem
+         js/chi-huy-cac-nhiem-ky.js
+         ===================================================== -->
+    <div id="leadershipByTermContainer">
+      <p class="loading-text">Đang tải danh sách...</p>
+    </div>
+
+  </main>
+
+  <!-- =====================================================
+       FOOTER — giống hệt các trang khác
+       ===================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Đội Thanh Niên Xung Kích. Mọi quyền được bảo lưu.</p>
+      <nav class="footer-nav">
+        <a href="gioi-thieu.html">Giới thiệu</a>
+        <a href="lien-he.html">Liên hệ</a>
+        <a href="https://www.facebook.com/share/1Arh91NyZb/?mibextid=wwXIfr/" target="_blank" rel="noopener">Fanpage Đội TNXK</a>
+        <a href="https://www.facebook.com/share/18B4nfBXqF/" target="_blank" rel="noopener">Fanpage Đoàn trường</a>
+        <a href="404.html">Trang lỗi (demo)</a>
+        <a href="admin-login.html" class="admin-footer-link">Đăng nhập</a>
+      </nav>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="back-to-top" aria-label="Quay về đầu trang">↑</button>
+
+  <!-- =====================================================
+       KHUNG CHI TIẾT 1 CHỈ HUY (modal) — giống hệt modal ở
+       trang gioi-thieu.html, hiện ra khi bấm vào 1 thẻ chỉ huy
+       ===================================================== -->
+  <div id="leadershipDetailModal" class="modal-overlay" hidden>
+    <div class="modal-box">
+      <button id="leadershipDetailClose" class="modal-close" aria-label="Đóng">✕</button>
+      <img id="leadershipDetailImg" src="" alt="" class="modal-avatar" />
+      <span id="leadershipDetailTitle" class="modal-position"></span>
+      <h2 id="leadershipDetailName" class="modal-name"></h2>
+      <p id="leadershipDetailBio" class="modal-bio"></p>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       NẠP JAVASCRIPT
+       Thứ tự bắt buộc:
+       1. main.js → cung cấp initMobileNav/initBackToTop/setFooterYear
+                    (dùng chung mọi trang).
+       2. chi-huy-cac-nhiem-ky.js → logic RIÊNG của trang này,
+                    chạy SAU CÙNG vì cần các hàm dùng chung ở trên.
+       ===================================================== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/chi-huy-qua-cac-nhiem-ky.js"></script>
+</body>
+</html>

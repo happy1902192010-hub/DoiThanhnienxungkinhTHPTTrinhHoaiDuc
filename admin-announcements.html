@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Quản lý Thông báo</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Quản lý Thông báo nổi bật</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <!-- =====================================================
+         FORM THÊM THÔNG BÁO MỚI
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Thêm thông báo mới</h2>
+
+      <form id="addAnnouncementForm" class="admin-form">
+        <label for="newTag">Nhãn hiển thị <span class="required">*</span></label>
+        <input type="text" id="newTag" placeholder="VD: Khẩn, Thông báo, Sự kiện..." required />
+
+        <label for="newTitle">Nội dung thông báo <span class="required">*</span></label>
+        <input type="text" id="newTitle" placeholder="VD: Lịch nghỉ hè và tổng kết hoạt động năm 2026" required />
+
+        <label for="newDate">Ngày đăng</label>
+        <input type="date" id="newDate" />
+
+        <label for="newLink">Link liên kết (không bắt buộc)</label>
+        <input type="text" id="newLink" placeholder="VD: tin-tuc-chi-tiet.html?id=5, hoặc link ngoài https://..." />
+
+        <button type="submit" class="btn btn-primary" id="addBtn">+ Thêm thông báo</button>
+      </form>
+
+      <p id="addMessage" class="admin-message" hidden></p>
+    </section>
+
+    <!-- =====================================================
+         DANH SÁCH THÔNG BÁO (sửa/xóa được trực tiếp)
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Danh sách thông báo</h2>
+      <p class="admin-hint">💡 Sửa trực tiếp trong ô rồi bấm "Lưu" ở đúng dòng đó.</p>
+
+      <div id="announcementsAdminList" class="admin-positions-list">
+        <p class="loading-text">Đang tải danh sách...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="js/admin-announcements.js"></script>
+</body>
+</html>

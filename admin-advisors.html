@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Quản lý Giáo viên cố vấn</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Quản lý Giáo viên cố vấn</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <section class="admin-section">
+      <h2 class="section-title">Thêm giáo viên cố vấn mới</h2>
+
+      <form id="addAdvisorForm" class="admin-form">
+        <label for="newName">Họ tên <span class="required">*</span></label>
+        <input type="text" id="newName" placeholder="VD: Nguyễn Văn A" required />
+
+        <label for="newTitle">Chức danh</label>
+        <input type="text" id="newTitle" placeholder="Giáo viên cố vấn" value="Giáo viên cố vấn" />
+
+        <label for="newBio">Giới thiệu ngắn (không bắt buộc)</label>
+        <textarea id="newBio" rows="3" placeholder="Vài dòng giới thiệu..."></textarea>
+
+        <label for="newImage">Ảnh đại diện (không bắt buộc)</label>
+        <input type="file" id="newImage" accept="image/*" />
+
+        <button type="submit" class="btn btn-primary" id="addBtn">+ Thêm giáo viên</button>
+      </form>
+
+      <p id="addMessage" class="admin-message" hidden></p>
+    </section>
+
+    <section class="admin-section">
+      <h2 class="section-title">Danh sách giáo viên cố vấn</h2>
+      <p class="admin-hint">💡 Sửa trực tiếp trong ô rồi bấm "Lưu" ở đúng dòng đó.</p>
+
+      <div id="advisorsList" class="admin-positions-list">
+        <p class="loading-text">Đang tải danh sách...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="js/admin-advisors.js"></script>
+</body>
+</html>

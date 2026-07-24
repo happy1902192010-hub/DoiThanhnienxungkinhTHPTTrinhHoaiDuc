@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Tin nhắn liên hệ</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Tin nhắn liên hệ</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+    <section class="admin-section">
+      <div class="section-header-row">
+        <h2 class="section-title">Danh sách tin nhắn</h2>
+        <span id="unreadBadge" class="unread-badge" hidden></span>
+      </div>
+      <p class="admin-hint">
+        💡 Tin nhắn mới nhất hiện lên đầu. Bấm "Đã đọc" để đánh dấu, hoặc "Xóa" nếu không cần lưu nữa.
+      </p>
+
+      <!-- Nội dung bên trong do JS render từ bảng contact_messages -->
+      <div id="messagesList" class="admin-messages-list">
+        <p class="loading-text">Đang tải tin nhắn...</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="js/admin-contact.js"></script>
+</body>
+</html>

@@ -1,0 +1,3283 @@
+/* =======================================================
+   FILE: style.css
+   Ghi chú: CSS này chỉ dựng KHUNG BỐ CỤC (layout) tối giản.
+   Toàn bộ màu sắc, font, hiệu ứng nằm trong các biến CSS
+   bên dưới (:root) để team thiết kế dễ dàng thay thế mà
+   không cần sửa cấu trúc HTML/CSS.
+   ======================================================= */
+
+:root {
+  /* color-scheme: light — ép trình duyệt LUÔN vẽ các phần tử giao
+     diện mặc định (như <button>, thanh cuộn, ô input...) theo bảng
+     màu SÁNG, bất kể máy người dùng đang bật Dark Mode hay không.
+     Thiếu dòng này, trên Safari iOS khi máy ở Dark Mode, 1 số phần
+     tử (đặc biệt là <button> chưa "reset" appearance) có thể bị
+     trình duyệt tự vẽ theo màu hệ thống (nền tối/icon trắng), gây
+     ra lỗi nút hamburger "biến mất" (trắng trên nền trắng) dù nút
+     vẫn hoạt động bình thường. */
+  color-scheme: light;
+
+  /* Đây là "biến CSS" (CSS variable). Thay vì gõ mã màu #1e5631
+     lặp lại ở hàng chục chỗ trong file, ta khai báo 1 LẦN ở đây
+     rồi dùng var(--color-primary) ở khắp nơi. Team thiết kế chỉ
+     cần đổi giá trị TẠI ĐÂY, toàn bộ trang sẽ tự đổi theo. */
+
+  /* --- Màu sắc (placeholder, team thiết kế sẽ thay bằng màu logo) --- */
+  --color-primary: #1e5631;      /* Màu chủ đạo — dùng cho nút, tiêu đề, viền nhấn */
+  --color-primary-dark: #143d22; /* Bản tối hơn của màu chủ đạo — dùng cho gradient banner, hover */
+  --color-secondary: #f2b705;    /* Màu phụ (nhấn) — dùng cho nút chính, badge thông báo */
+  --color-bg: #ffffff;           /* Màu nền chính của toàn trang */
+  --color-bg-alt: #f5f6f7;       /* Màu nền phụ (xám nhạt) — dùng cho khối nổi bật, footer */
+  --color-text: #222222;         /* Màu chữ chính */
+  --color-text-muted: #666666;   /* Màu chữ phụ, nhạt hơn — dùng cho ngày tháng, mô tả ngắn */
+  --color-border: #e0e0e0;       /* Màu viền/đường phân cách */
+
+  /* --- Font --- */
+  --font-base: "Segoe UI", Roboto, Arial, sans-serif; /* Font chữ mặc định toàn trang */
+  --font-size-base: 16px;                              /* Cỡ chữ gốc, các cỡ khác tính tương đối theo số này */
+
+  /* --- Bố cục --- */
+  --container-width: 1200px; /* Chiều rộng tối đa nội dung, tránh chữ bị kéo dài hết màn hình lớn */
+  --header-height: 88px;     /* Chiều cao thanh header — dùng đồng bộ ở nhiều nơi (VD: vị trí menu mobile) */
+  --radius: 8px;             /* Độ bo góc dùng chung cho nút, thẻ tin tức, ô tìm kiếm... */
+  --transition: 0.25s ease;  /* Tốc độ hiệu ứng chuyển động (hover, mở menu...) dùng chung cho đồng nhất */
+}
+
+/* --- Reset cơ bản --- */
+/* Ẩn phần tử khỏi MẮT THƯỜNG nhưng vẫn giữ trong HTML để công cụ
+   tìm kiếm (SEO) và phần mềm đọc màn hình cho người khiếm thị vẫn
+   đọc được — kỹ thuật phổ biến, KHÔNG dùng display:none (vì cách
+   đó ẩn hoàn toàn, kể cả với trình đọc màn hình) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-base);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===================== HEADER / NAV ===================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;              /* Vẫn cho phép xuống dòng khi màn hình THỰC SỰ hẹp (điện thoại) */
+  justify-content: space-between;
+  min-height: var(--header-height);
+  padding: 10px 24px;
+  gap: 16px;
+  max-width: 1500px; /* 👉 Rộng hơn phần nội dung (1200px) để logo + menu đủ chỗ
+                          nằm chung 1 hàng, NHƯNG vẫn có giới hạn — nhờ margin auto
+                          bên dưới, header sẽ CĂN GIỮA cân đối trên màn hình lớn,
+                          không bị dạt hẳn về 1 phía như khi để max-width: none. */
+  margin: 0 auto;    /* Căn giữa header-inner trong toàn bộ chiều rộng màn hình */
+}
+
+@media (max-width: 1560px) {
+  /* Khi màn hình không đủ rộng cho max-width 1500px, cho header
+     tự co lại theo đúng chiều rộng cửa sổ (trừ khoảng padding 2 bên),
+     tránh bị tràn ra ngoài hoặc phải cuộn ngang */
+  .header-inner {
+    max-width: calc(100% - 48px);
+  }
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.logo-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.site-name {
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  line-height: 1.25;
+}
+
+.slogan {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-primary-dark);
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;         /* Tự động xuống dòng khi không đủ chỗ ngang,
+                               thay vì ép chật hoặc bị cắt mất nội dung */
+  row-gap: 10px;            /* Khoảng cách giữa các "hàng" khi bị xuống dòng */
+  gap: 18px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  gap: 14px;
+}
+
+.nav-list a {
+  font-weight: 500;
+  padding: 8px 4px;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap; /* Ép chữ mỗi mục menu nằm trên 1 dòng, không tự xuống dòng
+                           khi khoảng trống không đủ rộng */
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.nav-list a:hover,
+.nav-list a.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.search-form input {
+  border: none;
+  padding: 8px 10px;
+  outline: none;
+  font-family: inherit;
+  min-width: 110px;
+  width: 140px;
+}
+
+.search-form button {
+  border: none;
+  background: var(--color-bg-alt);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  /* -webkit-appearance / appearance: none — NGĂN Safari iOS tự vẽ
+     style mặc định của hệ thống lên nút <button> này. Nếu thiếu 2
+     dòng này, khi người dùng iPhone bật Dark Mode, Safari có thể tự
+     đổi màu icon 3 gạch (span bên trong) theo bảng màu tối của hệ
+     thống (icon hoá trắng), khiến nút "biến mất" trên nền header
+     trắng dù vẫn bấm được bình thường — đây chính là lỗi đã gặp. */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.nav-toggle span {
+  display: block;
+  height: 3px;
+  background: var(--color-text);
+  border-radius: 2px;
+}
+
+/* ===================== BANNER ===================== */
+.banner {
+  /* line-height: 0 loại bỏ khoảng trắng thừa phía dưới ảnh — lỗi
+     kinh điển khi đặt <img> bên trong 1 khối block, do <img> mặc
+     định được coi là "inline" nên trình duyệt chừa chỗ cho khoảng
+     cách dòng chữ (dù không có chữ nào) */
+  line-height: 0;
+}
+
+.banner-img {
+  width: 100%;   /* Ảnh rộng full theo chiều ngang màn hình */
+  height: auto;  /* Chiều cao TỰ ĐỘNG tính theo đúng tỉ lệ gốc của ảnh,
+                    đảm bảo không bị kéo giãn/méo hay cắt mất phần nào */
+  display: block;
+}
+
+.banner h1 {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+}
+
+.banner p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 28px;
+}
+
+.banner-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  transition: transform var(--transition), background-color var(--transition);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background-color: var(--color-secondary);
+  color: var(--color-primary-dark);
+}
+
+.btn-outline {
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+/* ===================== SECTIONS CHUNG ===================== */
+.section {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: var(--color-primary);
+}
+
+.section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.see-all-link {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.loading-text {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* ===================== THÔNG BÁO ===================== */
+.announcements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.announcement-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background-color: var(--color-bg-alt);
+  border-left: 4px solid var(--color-secondary);
+  border-radius: var(--radius);
+  text-decoration: none; /* Phòng trường hợp render bằng thẻ <a> (có link) */
+  color: inherit;
+  transition: background-color var(--transition);
+}
+
+/* Chỉ thông báo có link (là thẻ <a>) mới có hiệu ứng hover, giúp
+   người dùng NHẬN BIẾT được thông báo nào bấm vào được */
+a.announcement-item:hover {
+  background-color: var(--color-border);
+}
+
+.announcement-arrow {
+  margin-left: auto;
+  color: var(--color-primary);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.announcement-item .badge {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: var(--color-secondary);
+  color: var(--color-primary-dark);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.announcement-item .content strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.announcement-item .content span.date {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.quick-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.quick-link-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: var(--color-bg-alt);
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: background-color var(--transition);
+}
+
+.quick-link-item:hover {
+  background-color: var(--color-border);
+}
+
+/* ===================== TIN TỨC ===================== */
+.news-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.filter-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  align-items: start; /* Thẻ đang mở rộng không kéo giãn các thẻ bên cạnh. */
+}
+
+.news-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* Giảm từ 540px xuống 420px: từ khi excerpt được cắt ngắn còn
+     tối đa ~140 ký tự (xem truncateText() trong main.js), nội dung
+     mỗi thẻ ngắn lại đáng kể, để 540px sẽ dư khoảng trắng rất nhiều
+     phía dưới. 420px là mức đủ cho: ảnh (180px) + category + tiêu đề
+     2 dòng + excerpt 3 dòng + ngày tháng + nút "Xem thêm", vẫn giữ
+     các thẻ đều nhau mà không bị trống trải. */
+  min-height: 420px;
+  transition: box-shadow var(--transition);
+}
+
+.news-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Khung chứa ảnh: chiều cao CỐ ĐỊNH (giống nhau ở mọi thẻ dù ảnh to/nhỏ
+   khác nhau), dùng object-fit: contain để hiện ĐỦ TOÀN BỘ ảnh gốc,
+   không bị cắt mất góc nào — phần thừa (nếu ảnh không vừa khít khung)
+   sẽ để trống với màu nền nhạt phía sau, KHÔNG dùng "cover" (cover sẽ
+   phóng to và cắt bớt ảnh cho vừa khung, gây mất nội dung ảnh) */
+.news-card-img-wrap {
+  width: 100%;
+  height: 180px;
+  /* Đổi từ var(--color-bg-alt) (xám nhạt) sang var(--color-bg)
+     (trắng, TRÙNG màu nền của .news-card) — khi ảnh không lấp đầy
+     hết chiều ngang (VD ảnh vuông/logo tròn), khoảng trống 2 bên
+     giờ cùng màu trắng với card, mắt thường không còn phân biệt
+     được "khung dư" nữa, dù ảnh vẫn hiện ĐỦ 100%, không bị cắt.
+     (Vẫn giữ nguyên chiều cao cố định 180px để các card trong danh
+     sách luôn đều nhau — xem ghi chú ở .news-card-img-wrap gốc). */
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border); /* Ranh giới nhẹ phân
+     tách khung ảnh và phần chữ bên dưới, vì giờ nền đã cùng màu trắng,
+     không còn tự phân biệt được 2 khu vực như lúc còn nền xám */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Không co lại khi phần chữ bên dưới dài */
+}
+
+.news-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.news-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;         /* Lấp đầy khoảng trống còn lại trong thẻ */
+}
+
+/* .news-card-img-wrap và .news-card-title-link giờ là thẻ <a> —
+   bỏ gạch chân/màu xanh mặc định của link, giữ nguyên màu chữ đen */
+.news-card-title-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.news-card-category {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.news-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  /* Giới hạn tối đa 2 DÒNG chữ, thừa thì tự thêm dấu "..." — giúp
+     tiêu đề dài/ngắn khác nhau vẫn chiếm đúng 1 khoảng không gian
+     bằng nhau, thẻ không bị lệch cao thấp */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* min-height = 2 dòng (line-height 1.6 kế thừa từ body × 2) — nếu
+     CHỈ dùng line-clamp mà không có dòng này, tiêu đề NGẮN (vừa 1
+     dòng) sẽ chiếm ít chiều cao hơn tiêu đề dài (2 dòng), khiến các
+     card lệch nhau dù line-clamp giới hạn ĐÚNG số dòng tối đa. Ép
+     min-height ở đây đảm bảo card nào cũng chừa sẵn chỗ cho 2 dòng,
+     kể cả khi tiêu đề thực tế chỉ có 1 dòng. */
+  min-height: 3.2em;
+}
+
+.news-card-excerpt {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  flex: 1;
+  /* Giới hạn tối đa 3 DÒNG, thừa thì hiện dấu "..." — lý do giống
+     news-card-title ở trên: giữ mọi thẻ cao bằng nhau bất kể tin
+     nào có mô tả dài, tin nào ngắn */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* min-height = 3 dòng — cùng lý do với news-card-title: mô tả
+     NGẮN (chưa lấp đủ 3 dòng) không được phép chiếm ít chỗ hơn mô
+     tả dài (đủ 3 dòng), nếu không phần "Xem thêm"/ngày tháng phía
+     dưới sẽ lệch cao thấp giữa các card. */
+  min-height: 4.8em;
+}
+
+/* Khi bấm "Xem thêm", JS thêm class "expanded" vào đây — bỏ hết
+   giới hạn dòng, hiện TOÀN BỘ nội dung mô tả ngay tại chỗ */
+.news-card-excerpt.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+/* Nút "Xem thêm" — giờ là <button> thường (không phải link), bấm
+   vào chỉ mở rộng/thu gọn đoạn mô tả TẠI CHỖ, không chuyển trang.
+   Luôn nằm SÁT ĐÁY thẻ nhờ margin-top: auto */
+.news-card-readmore-btn {
+  margin-top: auto;
+  padding-top: 8px;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  align-self: flex-start;
+  font-family: inherit;
+}
+
+.news-card-readmore-btn:hover {
+  text-decoration: underline;
+}
+
+.news-card-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+.no-results {
+  color: var(--color-text-muted);
+  font-style: italic;
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* ===================== BANNER PHỤ (các trang con) ===================== */
+/* Dùng cho mọi trang KHÔNG PHẢI trang chủ — banner nhỏ gọn hơn,
+   chỉ để hiện tên trang, không cần hình ảnh lớn/nút bấm như banner chính */
+.page-banner {
+  background-color: var(--color-bg-alt);
+  padding: 32px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-banner h1 {
+  font-size: 1.6rem;
+  color: var(--color-primary);
+}
+
+/* ===================== LỊCH SỬ THÀNH LẬP ===================== */
+.founder-box {
+  background-color: var(--color-bg-alt);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 32px;
+}
+
+.founder-year,
+.founder-name {
+  margin-bottom: 6px;
+}
+
+.founder-desc {
+  color: var(--color-text-muted);
+  margin-top: 10px;
+}
+
+.subsection-title {
+  font-size: 1.15rem;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+}
+
+/* ===================== TIMELINE (các đời chỉ huy) ===================== */
+/* .timeline là khối cha, dùng position:relative để làm điểm neo
+   cho đường thẳng dọc (::before) vẽ xuyên suốt các mốc thời gian */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+/* Đường thẳng dọc nối các "chấm tròn" mốc thời gian lại với nhau.
+   ::before tạo ra 1 phần tử ẢO (không có trong HTML thật) chỉ để vẽ trang trí */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background-color: var(--color-border);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 28px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Chấm tròn đánh dấu mỗi mốc — đặt lệch sang trái, đè lên đường
+   thẳng dọc phía trên, tạo cảm giác các mốc "nằm trên" đường timeline */
+.timeline-dot {
+  position: absolute;
+  left: -28px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  border: 3px solid var(--color-bg);
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.timeline-period {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  background-color: var(--color-primary-dark);
+  padding: 2px 10px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.timeline-term-name {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.timeline-leader {
+  margin-bottom: 4px;
+}
+
+.timeline-note {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* ===================== MỤC TIÊU HOẠT ĐỘNG ===================== */
+.goals-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.goals-list li {
+  position: relative;
+  padding-left: 28px;
+}
+
+/* Thay vì dùng dấu chấm mặc định của <li>, ta tự vẽ 1 icon dấu tick (✓)
+   bằng ::before để trông chuyên nghiệp hơn, đồng bộ màu với theme */
+.goals-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* ===================== SƠ ĐỒ CƠ CẤU TỔ CHỨC (dạng cây) ===================== */
+/* Kỹ thuật vẽ cây tổ chức bằng CSS thuần (không cần thư viện/ảnh):
+   - Toàn bộ cây nằm trong <ul class="org-tree">
+   - Mỗi node là 1 <li class="org-node">
+   - Node con nằm trong <ul class="org-children"> lồng bên trong node cha
+   - Dùng border để vẽ các đường nối cha-con */
+.org-chart-wrapper {
+  overflow-x: auto; /* Cho phép cuộn ngang trên điện thoại nếu cây quá rộng */
+  padding: 20px 0;
+}
+
+.org-tree,
+.org-children {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+.org-children {
+  padding-top: 32px;
+  gap: 16px;
+}
+
+.org-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 12px;
+}
+
+/* Đường thẳng đứng nối TỪ node cha XUỐNG hàng node con phía dưới */
+.org-node .org-children::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 20px;
+  background-color: var(--color-border);
+  transform: translateX(-50%);
+}
+
+/* Đường thẳng đứng nối TỪ mỗi node con LÊN đường ngang phía trên nó */
+.org-children > .org-node::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 2px;
+  height: 20px;
+  background-color: var(--color-border);
+}
+
+.org-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  min-width: 140px;
+  text-align: center;
+}
+
+.org-title {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+}
+
+.org-name {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* ===================== CƠ CẤU TỔ CHỨC (trang công khai) — GOM NHÓM THEO CẤP BẬC ===================== */
+/* Mỗi .org-level-section là 1 CẤP BẬC (VD: "Ban chỉ huy"), chứa 1 lưới
+   thẻ .org-cards-grid. Kích thước thẻ (các biến --op-...) được TÍNH SẴN
+   bằng JS (xem co-cau-to-chuc.js -> buildSizeCss) và gán trực tiếp vào
+   thuộc tính style="" của từng .org-level-section, nên CSS ở đây chỉ
+   cần ĐỌC LẠI các biến đó bằng var(...) — không cần sửa gì thêm khi
+   Admin đổi số cấp bậc hoặc kích thước thẻ. */
+.org-level-section {
+  margin-bottom: 40px;
+}
+
+.org-level-section:last-child {
+  margin-bottom: 0;
+}
+
+.org-level-section-title {
+  text-align: center;
+  font-size: 1.15rem;
+  margin-bottom: 20px;
+  position: relative;
+  color: var(--color-primary);
+}
+
+.org-cards-grid {
+  display: flex;
+  flex-wrap: wrap;         /* Tự xuống dòng khi không đủ chỗ ngang */
+  justify-content: center;
+  gap: 20px;
+}
+
+.org-card {
+  display: flex;
+  flex-direction: column;  /* Ảnh TRÊN, chữ DƯỚI — hợp với dạng lưới nhiều thẻ/hàng */
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  width: var(--op-card-w, 200px);
+  min-height: var(--op-card-h, auto);
+  padding: var(--op-pad-y, 20px) var(--op-pad-x, 16px);
+  border: var(--op-border-w, 1px) solid var(--op-border-color, var(--color-border));
+  border-radius: var(--radius);
+  cursor: pointer;          /* Báo hiệu bấm được, mở khung chi tiết */
+  background-color: var(--color-bg);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.org-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.org-card-img {
+  width: var(--op-avatar, 100px);
+  height: var(--op-avatar, 100px);
+  object-fit: cover;
+  border-radius: 50%; /* Ảnh đại diện dạng tròn cho gọn mắt */
+  flex-shrink: 0;
+  background-color: var(--color-bg-alt);
+  border: 2px solid var(--color-border);
+  margin-bottom: 8px;
+}
+
+.org-card-icon {
+  font-size: var(--op-icon-size, 1.8rem);
+  flex-shrink: 0;
+}
+
+/* Chức danh (VD: "Đội trưởng") — làm PHỤ ĐỀ nhỏ, đặt TRÊN tên người,
+   giống nhãn/badge, không cạnh tranh sự chú ý với tên */
+.org-card-title {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: var(--op-title-size, 0.8rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+}
+
+/* Tên người — phần NỔI BẬT NHẤT của thẻ (to, đậm, màu đậm),
+   vì đây mới là thông tin người xem quan tâm đầu tiên */
+.org-card-name {
+  display: block;
+  color: var(--color-text);
+  font-size: var(--op-name-size, 1.15rem);
+  font-weight: 700;
+}
+
+/* Link "Đăng nhập Admin" ở footer — làm nhạt màu hơn các link khác
+   để không gây chú ý với khách vãng lai, vẫn bấm được khi cần */
+.admin-footer-link {
+  opacity: 0.5;
+}
+
+/* ===================== TRANG ĐĂNG NHẬP ADMIN ===================== */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-alt);
+  padding: 20px;
+}
+
+.auth-box {
+  background-color: var(--color-bg);
+  border-radius: var(--radius);
+  padding: 40px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.auth-title {
+  color: var(--color-primary);
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+
+.auth-subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.auth-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.auth-form input {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.auth-form .btn {
+  margin-top: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.auth-error {
+  background-color: #fdecea;
+  color: #b3261e;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.remember-me-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.remember-me-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.auth-back-link {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ===================== HEADER KHU VỰC ADMIN ===================== */
+/* Khác với .site-header (công khai) — không có menu/tìm kiếm,
+   thêm nút Đăng xuất và link quay về Dashboard */
+.admin-header {
+  background-color: var(--color-primary-dark);
+  color: #fff;
+}
+
+.admin-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  gap: 16px;
+}
+
+.admin-header-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.admin-back-link {
+  color: #fff;
+  opacity: 0.8;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.admin-back-link:hover {
+  opacity: 1;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.btn-outline-dark {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color var(--transition);
+}
+
+.btn-outline-dark:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-main {
+  padding: 40px 20px;
+}
+
+/* ===================== ADMIN DASHBOARD — LƯỚI THẺ ĐIỀU HƯỚNG ===================== */
+.admin-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.admin-card {
+  display: block;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  text-align: center;
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.admin-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.admin-card-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.admin-card h2 {
+  font-size: 1.05rem;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+}
+
+.admin-card p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Thẻ "Sắp có" — làm mờ đi và tắt con trỏ tay, báo hiệu chưa dùng được */
+.admin-card-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===================== ADMIN — FORM THÊM/SỬA (CRUD) ===================== */
+.admin-section {
+  margin-bottom: 48px;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 480px;
+}
+
+.admin-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="file"],
+.admin-form select,
+.admin-form textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical; /* Cho phép người dùng kéo giãn textarea theo chiều dọc nếu cần gõ dài */
+}
+
+.admin-form .btn {
+  margin-top: 20px;
+  border: none;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.required {
+  color: #b3261e;
+}
+
+.admin-message {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.admin-message-success {
+  background-color: #e6f4ea;
+  color: #1e5631;
+}
+
+.admin-message-error {
+  background-color: #fdecea;
+  color: #b3261e;
+}
+
+.admin-hint {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 16px;
+}
+
+/* ===================== ADMIN — DANH SÁCH CÓ THỂ SỬA TRỰC TIẾP ===================== */
+.admin-positions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-position-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 16px;
+  align-items: start;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.admin-position-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  background-color: var(--color-bg-alt);
+}
+
+.admin-position-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-position-fields label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 6px;
+}
+
+.admin-position-fields input[type="text"],
+.admin-position-fields input[type="file"],
+.admin-position-fields select,
+.admin-position-fields textarea {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.admin-position-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-position-actions .btn {
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  padding: 8px 14px;
+}
+
+.btn-danger {
+  background-color: #fdecea;
+  color: #b3261e;
+}
+
+.btn-danger:hover {
+  background-color: #fadbd8;
+}
+
+@media (max-width: 600px) {
+  .admin-position-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================== SỰ KIỆN (trang công khai) ===================== */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.event-card {
+  display: flex;
+  gap: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: box-shadow var(--transition);
+}
+
+.event-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* Sự kiện đã diễn ra rồi — làm mờ đi để phân biệt trực quan với
+   sự kiện sắp tới, không cần đọc kỹ ngày tháng vẫn nhận ra ngay */
+.event-card-past {
+  opacity: 0.6;
+}
+
+.event-card-img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  flex-shrink: 0; /* Không co lại khi phần mô tả bên cạnh dài */
+}
+
+.event-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.event-card-date {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.event-card-title {
+  font-size: 1.2rem;
+}
+
+.event-card-location,
+.event-card-desc {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.event-past-label {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+}
+
+.btn-toggle-register {
+  align-self: flex-start;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Form đăng ký tham gia — hiện ra ngay dưới nút bấm, thụt vào
+   nhẹ và có đường viền trái để phân biệt với phần mô tả sự kiện */
+.register-form {
+  margin-top: 14px;
+  padding: 16px;
+  background-color: var(--color-bg-alt);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 360px;
+}
+
+.register-form label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.register-form input {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.register-form button {
+  margin-top: 14px;
+  border: none;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.register-message {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  max-width: 360px;
+}
+
+.register-message-success {
+  background-color: #e6f4ea;
+  color: #1e5631;
+}
+
+.register-message-error {
+  background-color: #fdecea;
+  color: #b3261e;
+}
+
+@media (max-width: 600px) {
+  .event-card {
+    flex-direction: column;
+  }
+
+  .event-card-img {
+    width: 100%;
+    height: 180px;
+  }
+}
+
+/* ===================== ADMIN — SỰ KIỆN: xem danh sách đăng ký ===================== */
+.btn-toggle-registrations {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.85rem;
+  align-self: flex-start;
+}
+
+.btn-toggle-registrations:hover {
+  background-color: var(--color-bg-alt);
+}
+
+.registrations-list {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: var(--color-bg-alt);
+  border-radius: var(--radius);
+}
+
+.registrations-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.registrations-table th,
+.registrations-table td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.registrations-table th {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.btn-delete-registration {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* ===================== ADMIN — THỐNG KÊ: SỐ LIỆU TỔNG QUAN ===================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.stat-icon {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.stat-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+/* ===================== ADMIN — DANH SÁCH ĐƠN GIẢN (thành viên) ===================== */
+.admin-simple-list {
+  margin-top: 20px;
+  overflow-x: auto; /* Cho phép cuộn ngang trên điện thoại nếu bảng rộng */
+}
+
+/* ===================== ADMIN — LƯỚI ẢNH THƯ VIỆN ===================== */
+.gallery-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.gallery-admin-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-admin-item img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.gallery-caption {
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  flex: 1;
+}
+
+.gallery-admin-item .btn {
+  margin: 0 10px 10px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===================== THƯ VIỆN ẢNH (trang công khai) ===================== */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.gallery-item {
+  cursor: pointer;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 1 / 1; /* Ép mọi ảnh vào khung vuông, lưới nhìn đều mắt hơn */
+  transition: transform var(--transition);
+}
+
+.gallery-item:hover {
+  transform: scale(1.03);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===================== LIGHTBOX (phóng to ảnh) ===================== */
+.lightbox {
+  position: fixed;
+  inset: 0; /* Viết tắt của top:0; right:0; bottom:0; left:0 — phủ kín toàn màn hình */
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 40px;
+}
+
+/* QUAN TRỌNG: dòng "display: flex" ở trên sẽ VÔ HIỆU HÓA thuộc tính
+   HTML "hidden" mặc định (trình duyệt vốn tự ẩn phần tử có "hidden"
+   bằng display:none, nhưng rule .lightbox phía trên có cùng độ ưu
+   tiên và nằm SAU trong file nên thắng, khiến khung lightbox LUÔN
+   HIỆN dù có "hidden" hay không — đây chính là lỗi khiến trang hiện
+   đen thui ngay cả khi chưa bấm ảnh nào). Dòng dưới đây ép buộc: hễ
+   còn thuộc tính "hidden" thì BẮT BUỘC ẩn đi, bất kể rule nào ở trên. */
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Nút chuyển ảnh ‹ › — đặt cố định 2 bên trái/phải màn hình,
+   luôn nổi trên ảnh dù ảnh to hay nhỏ */
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition);
+}
+
+.lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+@media (max-width: 600px) {
+  /* Trên điện thoại, thu nhỏ nút lại để không che mất ảnh */
+  .lightbox-nav {
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+  }
+
+  .lightbox-prev {
+    left: 8px;
+  }
+
+  .lightbox-next {
+    right: 8px;
+  }
+}
+
+/* ===================== TRANG LIÊN HỆ ===================== */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 48px;
+}
+
+.contact-info-item {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.contact-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.contact-info-item strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.contact-info-item p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.contact-info-item a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.contact-form button {
+  margin-top: 20px;
+  border: none;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+@media (max-width: 800px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================== TRANG LỖI 404 ===================== */
+.error-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  background-color: var(--color-bg-alt);
+}
+
+.error-box {
+  max-width: 440px;
+}
+
+.error-code {
+  font-size: 5rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.error-title {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+
+.error-desc {
+  color: var(--color-text-muted);
+  margin-bottom: 28px;
+}
+
+.error-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.error-actions .btn-outline {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ===================== ADMIN — TIN NHẮN LIÊN HỆ ===================== */
+.unread-badge {
+  background-color: var(--color-secondary);
+  color: var(--color-primary-dark);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.admin-messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-message-card {
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+/* Tin CHƯA đọc — viền trái nổi bật màu chủ đạo để Admin dễ nhận ra
+   ngay giữa danh sách, không cần đọc kỹ từng dòng mới biết */
+.admin-message-card.message-unread {
+  border-left-color: var(--color-primary);
+  background-color: var(--color-bg-alt);
+}
+
+.admin-message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.admin-message-email {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.admin-message-date {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.admin-message-body {
+  color: var(--color-text);
+  margin-bottom: 12px;
+  white-space: pre-wrap; /* Giữ nguyên xuống dòng người dùng đã gõ trong tin nhắn */
+}
+
+.admin-message-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-mark-read {
+  padding: 6px 14px;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  background: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.btn-mark-read:hover {
+  background-color: var(--color-bg-alt);
+}
+
+.read-label {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.btn-delete-message {
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  background: none;
+  color: #b3261e;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.btn-delete-message:hover {
+  text-decoration: underline;
+}
+
+/* ===================== THÀNH TÍCH (trang Giới thiệu, công khai) ===================== */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.achievement-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow var(--transition);
+}
+
+.achievement-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.achievement-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  background-color: var(--color-bg-alt);
+}
+
+.achievement-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.achievement-year {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background-color: var(--color-secondary);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+.achievement-title {
+  font-size: 1.05rem;
+}
+
+.achievement-desc {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* ===================== KHU VỰC ĐĂNG NHẬP (góc phải header) ===================== */
+.auth-control {
+  display: flex;
+  align-items: center;
+}
+
+.login-link {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #fff;
+  white-space: nowrap;
+  background-color: var(--color-primary);
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  border-bottom: none; /* Bỏ gạch chân kiểu menu thường, vì đây là NÚT nổi bật */
+  transition: background-color var(--transition);
+}
+
+.login-link:hover {
+  background-color: var(--color-primary-dark);
+  color: #fff;
+  border-bottom: none;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.user-greeting {
+  font-size: 0.85rem;
+  color: var(--color-text);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-panel-link {
+  padding: 6px 14px;
+  background-color: var(--color-secondary);
+  color: var(--color-primary-dark);
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.logout-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--color-border);
+  background: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.logout-btn:hover {
+  background-color: var(--color-bg-alt);
+}
+
+/* ===================== TRANG CHI TIẾT TIN TỨC ===================== */
+.back-link {
+  display: inline-block;
+  margin: 24px 0;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.news-detail {
+  max-width: 760px;
+  margin: 0 auto 60px;
+}
+
+.news-detail-category {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background-color: var(--color-bg-alt);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.news-detail-title {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.news-detail-meta {
+  display: flex;
+  gap: 20px;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.news-detail-img {
+  /* Đồng bộ với .news-block-img: bỏ width:100%, dùng max-width +
+     width/height:auto để khung tự "ôm khít" đúng tỉ lệ ảnh thật,
+     không còn khoảng trống dư 2 bên với ảnh vuông/dọc. */
+  display: block;
+  max-width: 100%;
+  max-height: 640px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius);
+  margin: 0 auto 28px;
+}
+
+.news-detail-body {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--color-text);
+  white-space: pre-wrap; /* Giữ nguyên xuống dòng nếu Admin có gõ nhiều đoạn */
+}
+
+/* ===================== ADMIN — NHIỀU ẢNH TRONG 1 BÀI ===================== */
+.admin-multi-thumb-col {
+  min-width: 90px;
+}
+
+.admin-thumb-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 96px;
+}
+
+.admin-thumb-item {
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+
+.admin-thumb-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+}
+
+.btn-remove-thumb {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background-color: #b3261e;
+  color: #fff;
+  font-size: 0.65rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remove-thumb:hover {
+  background-color: #8f1e18;
+}
+
+.admin-no-image {
+  width: 80px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-alt);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.news-detail-img-clickable {
+  cursor: pointer;
+}
+
+.news-detail-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.news-detail-gallery-item {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+
+.news-detail-gallery-item:hover {
+  transform: scale(1.03);
+}
+
+.event-card-img-clickable {
+  cursor: pointer;
+}
+
+.event-card-extra-images {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.event-card-thumb {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+
+.event-card-thumb:hover {
+  transform: scale(1.08);
+}
+
+.achievement-img-clickable {
+  cursor: pointer;
+}
+
+.achievement-extra-images {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.achievement-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+
+.achievement-thumb:hover {
+  transform: scale(1.08);
+}
+
+/* ===================== MODAL CHI TIẾT 1 CHỨC VỤ (Cơ cấu tổ chức) ===================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* Giống lightbox: dòng "display: flex" ở trên sẽ đè mất thuộc tính
+   "hidden" mặc định — dòng dưới đây ép buộc ẩn đi khi có "hidden" */
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-box {
+  position: relative;
+  background-color: var(--color-bg);
+  border-radius: var(--radius);
+  padding: 40px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  max-height: 90vh;
+  overflow-y: auto; /* Nếu giới thiệu ngắn dài, cho phép cuộn thay vì tràn ra ngoài */
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--color-bg-alt);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.modal-close:hover {
+  background-color: var(--color-border);
+}
+
+.modal-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-primary);
+  margin: 0 auto 16px;
+}
+
+.modal-position {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+.modal-name {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.modal-bio {
+  color: var(--color-text);
+  line-height: 1.7;
+  white-space: pre-wrap; /* Giữ nguyên xuống dòng nếu Admin gõ nhiều đoạn */
+  text-align: left;
+}
+
+/* ===================== BLOCK EDITOR (Admin — chữ/ảnh xen kẽ) ===================== */
+.block-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 6px 0;
+}
+
+.block-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-bg-alt);
+}
+
+.block-type-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  width: 70px;
+}
+
+.block-text-input {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.block-image-preview {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.block-controls {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.block-controls button {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.block-controls button:hover {
+  background-color: var(--color-border);
+}
+
+.block-add-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.block-add-buttons .btn {
+  margin-top: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--color-primary);
+  background-color: transparent;
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.block-add-buttons .btn:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+/* ===================== HIỂN THỊ KHỐI (trang công khai — chi tiết tin tức) ===================== */
+.news-block-text {
+  margin-bottom: 16px;
+}
+
+.news-block-img {
+  /* Bỏ "width: 100%" — đó chính là nguyên nhân gây dư khoảng trống:
+     ép chiều RỘNG luôn đầy khung trong khi chiều CAO bị giới hạn bởi
+     max-height, khiến ảnh vuông/cao bị co nhỏ theo chiều cao nhưng
+     khung chiều rộng vẫn to như cũ → dư 2 bên (khoảng trống được tô
+     màu nền cho dễ thấy). Đổi sang max-width + width:auto + height:
+     auto: trình duyệt tự tính CẢ chiều rộng lẫn chiều cao theo đúng
+     tỉ lệ gốc của ảnh, bị giới hạn bởi max-width (không vượt khung
+     bài viết) và max-height (không vượt 640px) — ảnh ngang sẽ giãn
+     theo chiều rộng, ảnh vuông/dọc sẽ giãn theo chiều cao, khung
+     luôn "ôm khít" đúng kích thước ảnh, không còn phần dư nào. */
+  display: block;
+  max-width: 100%;
+  max-height: 640px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius);
+  margin: 0 auto 16px;
+  cursor: pointer;
+  transition: transform var(--transition);
+}
+
+.news-block-img:hover {
+  transform: scale(1.01);
+}
+
+/* ===================== FOOTER ===================== */
+.site-footer {
+  background-color: var(--color-bg-alt);
+  padding: 24px 0;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.footer-nav {
+  display: flex;
+  gap: 16px;
+}
+
+/* ===================== BACK TO TOP ===================== */
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: opacity var(--transition);
+  z-index: 200;
+}
+
+.back-to-top.visible {
+  display: flex;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 860px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .main-nav {
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 20px;
+    display: none;
+    gap: 16px;
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .search-form {
+    width: 100%;
+  }
+
+  .search-form input {
+    width: 100%;
+  }
+
+  .banner {
+    padding: 56px 0;
+  }
+
+  .banner h1 {
+    font-size: 1.6rem;
+  }
+}
+
+/* ===================== ADMIN — NỘI DUNG BÀI VIẾT THEO KHỐI (chữ/ảnh, sắp xếp được) ===================== */
+.content-blocks-editor {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 12px;
+  background-color: var(--color-bg-alt);
+}
+
+.content-blocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.content-blocks-empty {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.content-block-item {
+  display: grid;
+  grid-template-columns: 34px 1fr 34px;
+  gap: 10px;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 10px;
+}
+
+.content-block-order-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.content-block-order-controls button {
+  width: 26px;
+  height: 22px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.content-block-order-controls button:hover:not(:disabled) {
+  background-color: var(--color-bg-alt);
+}
+
+.content-block-order-controls button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.content-block-order-num {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.content-block-body {
+  min-width: 0;
+}
+
+.content-block-text-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+.content-block-image-preview {
+  max-width: 100%;
+  max-height: 140px;
+  border-radius: 6px;
+  display: block;
+}
+
+.btn-block-remove {
+  border: none;
+  background-color: #fdecea;
+  color: #b3261e;
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  justify-self: center;
+}
+
+.btn-block-remove:hover {
+  background-color: #fadbd8;
+}
+
+.content-blocks-toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.content-blocks-toolbar .btn {
+  font-size: 0.8rem;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* 2 nút "+ Thêm khối chữ" / "+ Thêm khối ảnh" vốn dùng class
+   .btn-outline-dark (chữ/viền trắng — thiết kế cho NỀN TỐI như
+   header admin). Đặt trên nền sáng của khung content-blocks-editor
+   khiến chữ gần như trong suốt, nhìn như bị vô hiệu hóa. Ghi đè
+   riêng tại đây để 2 nút LUÔN nổi bật, bất kể đặt trên nền gì. */
+.content-blocks-toolbar .btn-add-text-block,
+.content-blocks-toolbar .btn-add-image-block-label {
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.content-blocks-toolbar .btn-add-text-block:hover,
+.content-blocks-toolbar .btn-add-image-block-label:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.btn-add-image-block-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  .content-block-item {
+    grid-template-columns: 30px 1fr 30px;
+  }
+}
+
+/* ===================== TRANG CHI TIẾT — NỘI DUNG THEO KHỐI ===================== */
+.news-detail-block-image {
+  width: 100%;
+  /* object-fit: contain (thay vì cover trước đây) — hiện ĐỦ TOÀN BỘ
+     ảnh gốc theo đúng tỉ lệ, không phóng to/cắt mất phần nào. Bỏ
+     luôn max-height cố định (480px) vì nó ép ảnh dọc/vuông phải bị
+     cắt cho vừa khung thấp; giờ để height: auto, khung sẽ tự giãn
+     theo đúng tỉ lệ thật của từng ảnh — ảnh ngang lẫn ảnh vuông/dọc
+     (như logo tròn) đều hiện trọn vẹn. */
+  height: auto;
+  max-height: 640px; /* Chỉ chặn ảnh QUÁ cao (ảnh dọc dài) tràn màn hình,
+                         không ảnh hưởng ảnh vuông/ngang bình thường */
+  object-fit: contain;
+  background-color: var(--color-bg-alt); /* Nền cho khoảng trống nếu ảnh
+                                             không lấp đầy hết khung ngang */
+  border-radius: var(--radius);
+  margin: 20px auto;
+  display: block;
+}
+
+/* ===================== BỘ CHỌN ẢNH DÙNG CHUNG (sắp xếp thứ tự + cắt/căn chỉnh) ===================== */
+.image-picker-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.image-picker-modal {
+  background-color: #fff;
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.image-picker-header {
+  padding: 16px 20px 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.image-picker-title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+
+.image-picker-hint {
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.image-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.image-picker-item {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: grab;
+  background-color: var(--color-bg-alt);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.image-picker-item.is-dragging {
+  opacity: 0.4;
+  transform: scale(0.97);
+}
+
+.image-picker-thumb {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.image-picker-order-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.image-picker-item-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 6px;
+  background-color: #fff;
+}
+
+.image-picker-btn-crop {
+  flex: 1;
+  border: 1px solid var(--color-border);
+  background-color: #fff;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  padding: 5px 4px;
+  cursor: pointer;
+}
+
+.image-picker-btn-crop:hover {
+  background-color: var(--color-bg-alt);
+}
+
+.image-picker-btn-remove {
+  border: none;
+  background-color: #fdecea;
+  color: #b3261e;
+  border-radius: 6px;
+  width: 26px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.image-picker-btn-remove:hover {
+  background-color: #fadbd8;
+}
+
+.image-picker-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.image-picker-crop-canvas-wrap {
+  padding: 16px 20px 0;
+  max-height: 55vh;
+  overflow: hidden;
+}
+
+.image-picker-crop-img {
+  display: block;
+  max-width: 100%;
+}
+
+.image-picker-crop-controls {
+  padding: 12px 20px 0;
+}
+
+.image-picker-zoom-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.image-picker-zoom {
+  flex: 1;
+}
+
+@media (max-width: 480px) {
+  .image-picker-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
+/* ===================== ADMIN — QUẢN LÝ CẤP BẬC (org_levels) ===================== */
+.admin-level-add-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.admin-level-add-form input[type="text"] {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.admin-levels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-level-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.admin-level-order-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.admin-level-order-controls button {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.admin-level-order-controls button:hover:not(:disabled) {
+  background-color: var(--color-bg-alt);
+}
+
+.admin-level-order-controls button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.admin-level-row .input-level-name {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.admin-level-row .input-level-size {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: inherit;
+  background-color: #fff;
+  font-size: 0.85rem;
+}
+
+.admin-level-size-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background-color: var(--color-bg-alt);
+  color: var(--color-text-muted);
+}
+
+.admin-level-size-badge--tier-1 {
+  background-color: #fff6da;
+  color: #8a6d00;
+}
+
+.admin-level-size-badge--tier-2 {
+  background-color: #eef1ff;
+  color: #3949ab;
+}
+
+.admin-level-row .btn {
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  padding: 8px 12px;
+}
+
+/* ===================== ADMIN — DANH SÁCH CHỨC VỤ GOM NHÓM THEO CẤP BẬC ===================== */
+.admin-level-group {
+  margin-bottom: 24px;
+}
+
+.admin-level-group-title {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 8px 12px;
+  background-color: var(--color-bg-alt);
+  border-radius: var(--radius);
+  margin: 0 0 12px;
+}
+
+.admin-level-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ===================== GIÁO VIÊN CỐ VẤN — THẺ NGANG MỚI (theo bản vẽ tay) ===================== */
+/* Chỉ áp dụng riêng cho #advisorsGrid (JS gán thêm class
+   "advisors-list" khi render — xem renderAdvisors() trong
+   gioi-thieu.js), KHÔNG đụng tới .org-cards-grid dùng chung ở
+   "Các đời chỉ huy" và trang "Cơ cấu tổ chức". */
+.advisors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Mỗi giáo viên cố vấn = 1 thẻ ngang: cột ảnh+tên bên trái,
+   khung "Giới thiệu" to bên phải — đúng theo bản vẽ tay:
+   vòng tròn (Hình cố vấn) + ô nhỏ (Tên cố vấn) + khung to (Giới thiệu) */
+.advisor-card {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  cursor: pointer; /* Vẫn bấm được để mở modal xem full (giữ tính năng cũ) */
+  transition: transform var(--transition);
+}
+
+.advisor-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Cột trái: ảnh tròn TRÊN, ô tên NGAY DƯỚI — cố định bề rộng để
+   mọi thẻ cố vấn thẳng hàng cột ảnh với nhau */
+.advisor-card-photo-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 160px;
+}
+
+.advisor-card-img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%; /* Vòng tròn — đúng như "Hình cố vấn" trong bản vẽ */
+  object-fit: cover;
+  border: 3px solid var(--color-primary);
+  background-color: var(--color-bg-alt);
+  margin-bottom: 10px;
+}
+
+/* Ô nhỏ ghi Tên cố vấn — tương ứng ô "Tên cố vấn" trong bản vẽ tay */
+.advisor-card-name-box {
+  width: 100%;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  background-color: var(--color-bg-alt);
+}
+
+.advisor-card-title {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+
+.advisor-card-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Khung to bên phải — tương ứng ô "Giới thiệu" trong bản vẽ tay,
+   hiện TRỰC TIẾP nội dung bio, không cần bấm vào mới xem được */
+.advisor-card-intro-box {
+  flex: 1;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  background-color: var(--color-bg);
+  display: flex;
+  align-items: center;
+}
+
+.advisor-card-bio {
+  color: var(--color-text);
+  line-height: 1.7;
+  white-space: pre-wrap; /* Giữ nguyên xuống dòng nếu Admin gõ nhiều đoạn */
+}
+
+/* Trên điện thoại: xếp cột ảnh LÊN TRÊN, khung giới thiệu XUỐNG
+   DƯỚI thay vì nằm ngang (không đủ chỗ ngang cho 2 cột) */
+@media (max-width: 640px) {
+  .advisor-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .advisor-card-intro-box {
+    width: 100%;
+  }
+} 
+
+/* =====================================================================
+   DÁN ĐOẠN NÀY VÀO CUỐI FILE css/style.css HIỆN CÓ (KHÔNG XÓA GÌ CŨ)
+   Chỉ thêm CSS MỚI cho khung accordion "Quản lý Các đời chỉ huy" —
+   không đụng tới bất kỳ class nào đã có sẵn trong dự án.
+   ===================================================================== */
+
+.leadership-admin-group {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.leadership-admin-group-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  background-color: var(--color-bg-alt);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.leadership-admin-group-header:hover {
+  background-color: var(--color-border);
+}
+
+.leadership-admin-group-title {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.leadership-admin-group-count {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+.leadership-admin-group-arrow {
+  margin-left: auto;
+  transition: transform var(--transition);
+}
+
+.leadership-admin-group-header.is-open .leadership-admin-group-arrow {
+  transform: rotate(90deg);
+}
+
+.leadership-admin-group-body {
+  padding: 16px;
+} 
+
+/* =====================================================================
+   DÁN ĐOẠN NÀY VÀO CUỐI FILE css/style.css HIỆN CÓ (KHÔNG XÓA GÌ CŨ)
+   Chỉ thêm CSS MỚI cho khung accordion "Quản lý Các đời chỉ huy" —
+   không đụng tới bất kỳ class nào đã có sẵn trong dự án.
+   ===================================================================== */
+
+.leadership-admin-group {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.leadership-admin-group-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  background-color: var(--color-bg-alt);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.leadership-admin-group-header:hover {
+  background-color: var(--color-border);
+}
+
+.leadership-admin-group-title {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.leadership-admin-group-count {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+.leadership-admin-group-arrow {
+  margin-left: auto;
+  transition: transform var(--transition);
+}
+
+.leadership-admin-group-header.is-open .leadership-admin-group-arrow {
+  transform: rotate(90deg);
+}
+
+.leadership-admin-group-body {
+  padding: 16px;
+}
+
+/* ===================== CẤP BẬC TRONG 1 NHIỆM KỲ (trang công khai) ===================== */
+.leadership-level-group {
+  margin-bottom: 32px;
+}
+
+.leadership-level-group:last-child {
+  margin-bottom: 0;
+}
+
+.leadership-level-title {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 16px;
+}
+
+/* =====================================================================
+   DÁN THÊM VÀO CUỐI FILE (KHÔNG XÓA GÌ CŨ)
+   Yêu cầu: cho thanh tìm kiếm (.search-form) xuống HÀNG RIÊNG bên dưới,
+   còn logo + slogan (.logo-link) vẫn nằm NGANG HÀNG với toàn bộ menu
+   (.nav-list, gồm cả mục Đăng nhập/Đăng xuất) ở hàng trên.
+
+   Cách làm: .main-nav vốn đã là flex + flex-wrap: wrap (xem rule gốc
+   ở trên), nên ta chỉ cần buộc riêng .search-form phải "chiếm trọn
+   1 hàng" (flex-basis: 100%) và xếp nó SAU nav-list (order lớn hơn),
+   khi đó trình duyệt tự động đẩy nó xuống dòng kế tiếp — không cần
+   sửa HTML, không đụng đến JS (nav-toggle mở/đóng menu mobile vẫn
+   hoạt động y như cũ vì #mainNav không đổi cấu trúc). */
+.main-nav .search-form {
+  order: 2;              /* Luôn xếp SAU nav-list (mặc định order: 0) */
+  justify-content: flex-end; /* Căn ô tìm kiếm sang phải, thẳng hàng với menu bên trên */
+  margin-top: 4px;       /* Khoảng cách nhẹ với hàng menu phía trên */
+}
+
+/* Đảm bảo nav-list luôn đứng TRƯỚC search-form trong thứ tự hiển thị,
+   dù trong HTML nó vốn đã đứng trước (phòng trường hợp sau này đổi
+   thứ tự thẻ trong HTML thì CSS vẫn tự sắp xếp đúng ý) */
+.main-nav .nav-list {
+  order: 1;
+}
+
+/* =====================================================================
+   DÁN THÊM VÀO CUỐI FILE (KHÔNG XÓA GÌ CŨ) — BẢN SỬA LẦN 2
+   Yêu cầu mới: Logo + Slogan PHẢI nằm chung 1 hàng với TOÀN BỘ menu
+   (Trang chủ...Liên hệ + Đăng nhập/Đăng xuất). Thanh tìm kiếm xuống
+   hàng RIÊNG bên dưới nhưng KHÔNG kéo full-width — tự co nhỏ theo
+   đúng kích thước nội dung của nó (giống hình ảnh gốc ban đầu bạn gửi),
+   nằm căn phải bên dưới menu.
+
+   CHỈ áp dụng cho màn hình máy tính (từ 861px trở lên) — dưới 860px
+   vẫn dùng ĐÚNG NGUYÊN layout menu ẩn/hiện qua nút hamburger như cũ,
+   không đụng gì tới phần responsive mobile đã có sẵn.
+
+   Cách làm: Cho .main-nav "biến mất" khỏi cây bố cục (display: contents)
+   để 2 phần tử con của nó — .nav-list và .search-form — trở thành
+   item TRỰC TIẾP của .header-inner, xếp chung dòng với .logo-link.
+   Sau đó dùng 1 điểm "ngắt dòng" vô hình (::after, cao 0px) để đẩy
+   riêng .search-form xuống dòng dưới mà KHÔNG ép nó giãn rộng ra
+   (khác với cách flex-basis:100% ở bản trước — đó chính là lý do
+   thanh tìm kiếm bị kéo dài hết cỡ). */
+@media (min-width: 861px) {
+  .header-inner {
+    flex-wrap: wrap; /* Cho phép .search-form rớt xuống dòng mới khi cần */
+  }
+
+  .main-nav {
+    display: contents; /* "Tháo khung" main-nav, để nav-list + search-form
+                           tham gia trực tiếp vào hàng chứa logo-link */
+  }
+
+  .main-nav .nav-list {
+    order: 1; /* Đứng ngay sau logo-link, cùng hàng với logo */
+  }
+
+  /* Điểm ngắt dòng vô hình: cao 0px, không nhìn thấy được, nhưng
+     buộc trình duyệt phải xuống dòng mới cho phần tử xếp SAU nó */
+  .header-inner::after {
+    content: "";
+    order: 2;
+    flex-basis: 100%;
+    height: 0;
+  }
+
+  .main-nav .search-form {
+    order: 3;           /* Luôn nằm ở dòng MỚI, sau điểm ngắt dòng */
+    flex-basis: auto;   /* QUAN TRỌNG: hủy flex-basis:100% ở rule cũ phía trên
+                            -> thanh tìm kiếm tự co theo đúng kích thước nội
+                            dung của nó, KHÔNG bị kéo giãn hết chiều ngang */
+    margin-left: auto;  /* Đẩy thanh tìm kiếm nhỏ này sang bên phải */
+    margin-top: 10px;
+  }
+} 
+
+/* =====================================================================
+   DÁN THÊM VÀO CUỐI FILE (KHÔNG XÓA GÌ CŨ) — BẢN SỬA LẦN 3
+   Thay cho đoạn wrap trong .nav-list (gây khoảng trắng thừa).
+   Tháo khung .nav-list (giống .main-nav) để từng mục menu và
+   .auth-control trở thành item NGANG HÀNG trực tiếp với logo-link
+   trong .header-inner. Dùng 2 điểm ngắt dòng vô hình để tách
+   thành 3 hàng: [Logo + Menu] / [Đăng nhập] / [Tìm kiếm]. */
+@media (min-width: 861px) {
+  .nav-list {
+    display: contents; /* Tháo khung ul, các <li> tham gia trực tiếp
+                           vào hàng chứa logo-link trong header-inner */
+  }
+
+  .nav-list li:not(.auth-control) {
+    order: 1; /* Các mục Trang chủ...Liên hệ: cùng hàng với logo */
+  }
+
+  /* Điểm ngắt dòng thứ 1: đẩy .auth-control xuống hàng riêng bên dưới menu */
+  .header-inner::before {
+    content: "";
+    order: 2;
+    flex-basis: 100%;
+    height: 0;
+  }
+
+  .nav-list .auth-control {
+    order: 3;
+    margin-left: auto;  /* Căn sang phải cho gọn */
+    margin-top: 2px;
+  }
+
+  /* Điểm ngắt dòng thứ 2: đẩy ô tìm kiếm xuống hàng riêng, dưới cùng */
+  .header-inner::after {
+    content: "";
+    order: 4;
+    flex-basis: 100%;
+    height: 0;
+  }
+
+  .main-nav .search-form {
+    order: 5;
+    flex-basis: auto;
+    margin-left: auto;
+    margin-top: 10px;
+  }
+}
+
+/* =====================================================================
+   DÁN THÊM VÀO CUỐI FILE — BẢN SỬA LẦN 4
+   Rút ngắn khoảng cách giữa các mục menu (Trang chủ...Liên hệ).
+   Lý do bị xa: .nav-list đã "display: contents" nên gap:14px của nó
+   không còn hiệu lực, các mục bị .header-inner dàn đều bằng
+   justify-content: space-between. Giờ đổi sang căn trái + tự thêm
+   khoảng cách ngang (column-gap) cho .header-inner. */
+@media (min-width: 861px) {
+  .header-inner {
+    justify-content: flex-start; /* Không dàn đều nữa, để các mục nằm sát nhau */
+    column-gap: 22px;            /* Khoảng cách giữa logo và từng mục menu */
+  }
+
+  /* Đẩy đăng nhập và tìm kiếm sang phải riêng, vì giờ không còn
+     justify-content: space-between lo việc đó nữa */
+  .nav-list .auth-control {
+    margin-left: auto;
+  }
+
+  .main-nav .search-form {
+    margin-left: auto;
+  }
+}
+
+/* =====================================================================
+   DÁN THÊM VÀO CUỐI FILE — BẢN SỬA LẦN 5
+   Đưa ô tìm kiếm quay lại NGANG HÀNG với logo + menu (hàng 1),
+   chỉ còn riêng .auth-control (Đăng nhập/Xin chào...) xuống hàng 2.
+   Ghi đè lại "order" và "margin-top" của .search-form ở các đoạn
+   thêm trước đó (đoạn này nằm SAU nên sẽ thắng). */
+@media (min-width: 861px) {
+  .main-nav .search-form {
+    order: 1;           /* Cùng nhóm thứ tự với logo + các mục menu (hàng 1) */
+    margin-left: auto;  /* Đẩy sát về bên phải trong hàng 1 */
+    margin-top: 0;       /* Bỏ khoảng cách trên vì không còn xuống hàng riêng nữa */
+  }
+
+  /* Bỏ tác dụng của điểm ngắt dòng thứ 2 (::after) — không cần
+     ngắt hàng cho ô tìm kiếm nữa vì giờ nó đã ở chung hàng 1 */
+  .header-inner::after {
+    display: none;
+  }
+}
+
+/* =====================================================================
+   DÁN THÊM VÀO CUỐI FILE — BẢN SỬA LẦN 6
+   Đẩy dải menu (Trang chủ...Liên hệ) ra giữa hơn 1 chút, bằng cách
+   tăng khoảng cách giữa Logo và mục menu ĐẦU TIÊN (Trang chủ).
+   Chỉ mục đầu tiên trong nav-list mới cần margin-left, các mục sau
+   đã có sẵn column-gap từ .header-inner lo rồi. */
+@media (min-width: 861px) {
+  .nav-list li:first-child {
+    margin-left: 30px; /* Tăng/giảm số này để menu ra giữa nhiều/ít hơn */
+  }
+}
+
+/* =====================================================================
+   DÁN THÊM VÀO CUỐI FILE — PHÓNG TO LOGO + TÊN ĐỘI + SLOGAN
+   ===================================================== */
+.logo-img {
+  width: 72px;
+  height: 72px;
+}
+
+.site-name {
+  font-size: 1.7rem; /* Tên "Đội TNXK" */
+}
+
+.slogan {
+  font-size: 1.05rem; /* Dòng slogan bên dưới */
+}

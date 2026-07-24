@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!-- lang="vi": báo cho trình duyệt biết đây là trang tiếng Việt,
+     giúp công cụ đọc màn hình và Google phát âm/index đúng ngôn ngữ -->
+<html lang="vi">
+<head>
+  <!-- charset UTF-8: BẮT BUỘC để hiển thị đúng tiếng Việt có dấu,
+       nếu thiếu dòng này chữ có thể hiện thành ký tự lạ -->
+  <meta charset="UTF-8" />
+
+  <!-- viewport: báo cho trình duyệt trên ĐIỆN THOẠI hiển thị đúng
+       tỉ lệ (không bị zoom to/nhỏ bất thường). Bắt buộc để web
+       responsive (tự co giãn theo màn hình) hoạt động đúng -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tiêu đề hiện trên tab trình duyệt -->
+  <title>Đội TNXK - Trang chủ</title>
+
+  <!-- Favicon: icon hiển thị trên tab trình duyệt.
+       Dùng file LOGO-ĐTNXK-favicon.png (đã xóa nền, nền trong suốt,
+       kích thước 512x512 để hiển thị to & nét hơn so với file logo
+       gốc dùng cho header). type="image/png" báo cho trình duyệt
+       biết định dạng ảnh để hiển thị đúng cách -->
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/LOGO-ĐTNXK-favicon.png" />
+
+  <!-- Nạp file CSS để trang có bố cục/màu sắc -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- =====================================================
+       HEADER / NAV
+       Thẻ <header> chứa toàn bộ phần đầu trang: logo, menu,
+       ô tìm kiếm. Đây là phần LẶP LẠI giống nhau ở MỌI trang
+       (index.html, gioi-thieu.html, su-kien.html...) để người
+       dùng luôn thấy menu quen thuộc dù đang ở trang nào.
+       ===================================================== -->
+  <header class="site-header">
+    <!-- .container: giới hạn chiều rộng nội dung, căn giữa màn hình
+         (định nghĩa trong style.css, biến --container-width) -->
+    <div class="container header-inner">
+
+      <!-- Logo + tên đội, bấm vào sẽ quay về trang chủ -->
+      <a href="index.html" class="logo-link">
+        <img src="assets/LOGO-ĐTNXK.png" alt="Logo Đội TNXK" class="logo-img" />
+        <span class="site-name">
+          Đội TNXK
+          <small class="slogan">Xung kích - Sáng tạo - Đoàn kết</small>
+        </span>
+      </a>
+
+      <!-- Nút hamburger (3 gạch ngang) — CHỈ hiện trên màn hình nhỏ
+           (điện thoại), được ẩn/hiện bằng CSS media query.
+           aria-label / aria-expanded: hỗ trợ người dùng khiếm thị
+           dùng phần mềm đọc màn hình -->
+      <button class="nav-toggle" id="navToggle" aria-label="Mở menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Toàn bộ menu điều hướng + ô tìm kiếm.
+           id="mainNav" được js/main.js dùng để show/hide trên mobile -->
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-list">
+          <!-- class="active": đánh dấu trang ĐANG ĐỨNG (Trang chủ),
+               giúp người dùng biết mình đang ở đâu. Khi tạo trang
+               khác, nhớ chuyển class "active" sang đúng mục đó -->
+          <li><a href="index.html" class="active">Trang chủ</a></li>
+          <li><a href="gioi-thieu.html">Giới thiệu</a></li>
+          <li><a href="chi-huy-qua-cac-nhiem-ky.html">Các đời chỉ huy</a></li>
+          <li><a href="co-cau-to-chuc.html">Cơ cấu tổ chức</a></li>
+          <li><a href="tin-tuc.html">Tin tức</a></li>
+          <li><a href="su-kien.html">Sự kiện</a></li>
+          <li><a href="thu-vien.html">Thư viện ảnh</a></li>
+          <li><a href="lien-he.html">Liên hệ</a></li>
+          <!-- Mục đăng nhập/tài khoản nằm NGAY TRONG danh sách menu
+               (không còn là nút riêng nổi bật), main.js tự động đổi
+               nội dung bên trong tùy trạng thái đăng nhập -->
+          <li class="auth-control" id="authControl">
+            <a href="admin-login.html" class="login-link" id="loginLink">Đăng nhập</a>
+          </li>
+        </ul>
+
+        <!-- Form tìm kiếm tin tức. role="search" giúp trình đọc
+             màn hình nhận diện đây là khu vực tìm kiếm -->
+        <form class="search-form" id="searchForm" role="search">
+          <input
+            type="search"
+            id="searchInput"
+            name="q"
+            placeholder="Tìm kiếm tin tức..."
+            aria-label="Tìm kiếm tin tức"
+          />
+          <button type="submit" aria-label="Tìm kiếm">🔍</button>
+        </form>
+
+      </nav>
+    </div>
+  </header>
+
+  <!-- =====================================================
+       BANNER
+       Khối lớn ngay đầu trang, mục đích gây ấn tượng đầu tiên
+       với slogan/thông điệp chính + 2 nút hành động (CTA)
+       ===================================================== -->
+  <section class="banner" id="banner">
+    <!-- Dùng thẻ <img> THẬT thay vì CSS background-image, để hiển
+         thị TOÀN BỘ ảnh banner theo đúng tỉ lệ gốc, không bị cắt
+         2 bên như khi dùng background-size: cover -->
+    <img src="assets/banner-TNXK.jpg" alt="Banner Đội Thanh Niên Xung Kích" class="banner-img" />
+
+    <!-- h1 vẫn giữ lại (ẩn khỏi mắt thường bằng class "sr-only")
+         vì công cụ tìm kiếm (SEO) và phần mềm đọc màn hình cho
+         người khiếm thị cần 1 tiêu đề h1 rõ ràng trên trang -->
+    <h1 class="sr-only">Đội Thanh Niên Xung Kích</h1>
+  </section>
+
+  <!-- <main>: nội dung CHÍNH của trang (khác với header/footer
+       là phần lặp lại). Giúp công cụ đọc màn hình và SEO hiểu
+       đâu là nội dung quan trọng nhất -->
+  <main class="container">
+
+    <!-- =====================================================
+         THÔNG BÁO NỔI BẬT + LIÊN KẾT NHANH
+         Đây là khu vực TĨNH (cấu trúc), nội dung bên trong
+         #announcementsList sẽ được XÓA và THAY THẾ hoàn toàn
+         bằng JavaScript (xem hàm renderAnnouncements trong main.js)
+         ===================================================== -->
+    <section class="section" id="announcements-section" aria-labelledby="announcements-heading">
+      <h2 id="announcements-heading" class="section-title">Thông báo nổi bật</h2>
+
+      <!-- Nội dung bên trong div này ban đầu chỉ là chữ "Đang tải...",
+           sau đó JS sẽ tự động thay bằng danh sách thông báo thật -->
+      <div id="announcementsList" class="announcements-list">
+        <p class="loading-text">Đang tải thông báo...</p>
+      </div>
+
+      <!-- Liên kết nhanh: KHÔNG cần JS, vì đây là link cố định
+           không đổi thường xuyên. 👉 Nhớ thay link Facebook thật -->
+      <div class="quick-links">
+        <a href="https://www.facebook.com/share/18B4nfBXqF/" target="_blank" rel="noopener" class="quick-link-item">
+          <img src="assets/LOGO-DOAN.jpg" alt="Logo Đoàn trường" class="quick-link-icon-img" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;margin-right:6px;border-radius:50%;" />
+          Fanpage Đoàn trường
+        </a>
+        <a href="https://www.facebook.com/share/1Arh91NyZb/?mibextid=wwXIfr/" target="_blank" rel="noopener" class="quick-link-item">
+          <img src="assets/LOGO-ĐTNXK.png" alt="Logo Đội TNXK" class="quick-link-icon-img" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;margin-right:6px;" />
+          Fanpage Đội TNXK
+        </a>
+        <a href="su-kien.html" class="quick-link-item">
+          <span class="quick-link-icon">📅</span>
+          Sự kiện sắp diễn ra
+        </a>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         TIN TỨC MỚI
+         Tương tự phần thông báo: khung HTML cố định, nội dung
+         bên trong #newsList và #newsFilters do JS tự vẽ ra
+         dựa theo dữ liệu trong data/sample-data.js
+         ===================================================== -->
+    <section class="section" id="news-section" aria-labelledby="news-heading">
+      <div class="section-header-row">
+        <h2 id="news-heading" class="section-title">Tin tức mới</h2>
+        <a href="tin-tuc.html" class="see-all-link">Xem tất cả →</a>
+      </div>
+
+      <!-- Nút "Tất cả" viết sẵn trong HTML (luôn cố định).
+           Các nút danh mục khác (VD: "Hoạt động", "Thành tích")
+           được JS TỰ ĐỘNG thêm vào sau nút này, dựa trên dữ liệu
+           tin tức hiện có (xem hàm renderCategoryFilters) -->
+      <div class="news-filters" id="newsFilters">
+        <button class="filter-btn active" data-category="all">Tất cả</button>
+      </div>
+
+      <!-- Danh sách thẻ tin tức — nội dung bên trong sẽ bị THAY THẾ
+           hoàn toàn mỗi khi người dùng lọc/tìm kiếm (xem renderNewsList) -->
+      <div id="newsList" class="news-grid">
+        <p class="loading-text">Đang tải tin tức...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================
+       FOOTER — phần chân trang, lặp lại ở mọi trang
+       ===================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <!-- id="year" sẽ được JS tự động điền năm hiện tại,
+           để không phải sửa tay mỗi khi sang năm mới -->
+      <p>&copy; <span id="year"></span> Đội Thanh Niên Xung Kích. Mọi quyền được bảo lưu.</p>
+      <nav class="footer-nav">
+        <a href="gioi-thieu.html">Giới thiệu</a>
+        <a href="lien-he.html">Liên hệ</a>
+        <a href="https://www.facebook.com/share/1Arh91NyZb/?mibextid=wwXIfr/" target="_blank" rel="noopener">Fanpage Đội TNXK</a>
+        <a href="https://www.facebook.com/share/18B4nfBXqF/" target="_blank" rel="noopener">Fanpage Đoàn trường</a>
+        <a href="404.html">Trang lỗi (demo)</a>
+        <a href="admin-login.html" class="admin-footer-link">Đăng nhập</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Nút tròn "quay về đầu trang" — ẩn mặc định (display:none
+       trong CSS), chỉ hiện khi cuộn xuống đủ xa (xem initBackToTop) -->
+  <button id="backToTop" class="back-to-top" aria-label="Quay về đầu trang">↑</button>
+
+  <div id="newsExcerptOverlay" class="news-excerpt-overlay" hidden>
+    <div class="news-excerpt-box">
+      <button id="newsExcerptClose" class="news-excerpt-box-close">✕</button>
+      <h3 id="newsExcerptTitle" class="news-excerpt-box-title"></h3>
+      <p id="newsExcerptContent" class="news-excerpt-box-content"></p>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       NẠP FILE JAVASCRIPT
+       THỨ TỰ RẤT QUAN TRỌNG: phải nạp sample-data.js TRƯỚC
+       main.js, vì main.js cần dùng biến SAMPLE_NEWS/
+       SAMPLE_ANNOUNCEMENTS đã được khai báo trong sample-data.js.
+       Nếu đảo ngược thứ tự, trình duyệt sẽ báo lỗi "chưa định nghĩa".
+       ===================================================== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="data/sample-data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

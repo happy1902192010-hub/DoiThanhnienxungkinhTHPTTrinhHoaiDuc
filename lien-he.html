@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Liên hệ</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/LOGO-ĐTNXK-favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo-link">
+        <img src="assets/LOGO-ĐTNXK.png" alt="Logo Đội TNXK" class="logo-img" />
+        <span class="site-name">
+          Đội TNXK
+          <small class="slogan">Xung kích - Sáng tạo - Đoàn kết</small>
+        </span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Mở menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-list">
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="gioi-thieu.html">Giới thiệu</a></li>
+          <li><a href="chi-huy-qua-cac-nhiem-ky.html">Các đời chỉ huy</a></li>
+          <li><a href="co-cau-to-chuc.html">Cơ cấu tổ chức</a></li>
+          <li><a href="tin-tuc.html">Tin tức</a></li>
+          <li><a href="su-kien.html">Sự kiện</a></li>
+          <li><a href="thu-vien.html">Thư viện ảnh</a></li>
+          <li><a href="lien-he.html" class="active">Liên hệ</a></li>
+          <li class="auth-control" id="authControl">
+            <a href="admin-login.html" class="login-link" id="loginLink">Đăng nhập</a>
+          </li>
+        </ul>
+
+        <form class="search-form" id="searchForm" role="search">
+          <input type="search" id="searchInput" name="q" placeholder="Tìm kiếm tin tức..." aria-label="Tìm kiếm tin tức" />
+          <button type="submit" aria-label="Tìm kiếm">🔍</button>
+        </form>
+
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1>Liên hệ với chúng tôi</h1>
+    </div>
+  </section>
+
+  <main class="container">
+    <section class="section contact-layout">
+
+      <!-- =====================================================
+           THÔNG TIN LIÊN HỆ TĨNH — 👉 thay bằng thông tin thật
+           ===================================================== -->
+      <div class="contact-info">
+        <h2 class="section-title">Thông tin liên hệ</h2>
+
+        <div class="contact-info-item">
+          <span class="contact-icon">📍</span>
+          <div>
+            <strong>Địa chỉ</strong>
+            <p>[Địa chỉ trường/văn phòng Đội TNXK]</p>
+          </div>
+        </div>
+
+        <div class="contact-info-item">
+          <span class="contact-icon">📞</span>
+          <div>
+            <strong>Điện thoại</strong>
+            <p>[Số điện thoại liên hệ]</p>
+          </div>
+        </div>
+
+        <div class="contact-info-item">
+          <span class="contact-icon">✉️</span>
+          <div>
+            <strong>Email</strong>
+            <p>doitnxkthpttrinhhoaiduc@gmail.com</p>
+          </div>
+        </div>
+
+        <div class="contact-info-item">
+          <span class="contact-icon">📘</span>
+          <div>
+            <strong>Fanpage</strong>
+            <p><a href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook Đội TNXK</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+           FORM GỬI TIN NHẮN — lưu vào Supabase (bảng contact_messages)
+           ===================================================== -->
+      <div class="contact-form-wrapper">
+        <h2 class="section-title">Gửi tin nhắn cho chúng tôi</h2>
+
+        <form id="contactForm" class="contact-form">
+          <label for="contactName">Họ và tên <span class="required">*</span></label>
+          <input type="text" id="contactName" required />
+
+          <label for="contactEmail">Email</label>
+          <input type="email" id="contactEmail" />
+
+          <label for="contactMessage">Nội dung <span class="required">*</span></label>
+          <textarea id="contactMessage" rows="5" required placeholder="Bạn muốn hỏi/góp ý điều gì..."></textarea>
+
+          <button type="submit" class="btn btn-primary" id="contactSubmitBtn">Gửi tin nhắn</button>
+        </form>
+
+        <p id="contactMessage-status" class="admin-message" hidden></p>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Đội Thanh Niên Xung Kích. Mọi quyền được bảo lưu.</p>
+      <nav class="footer-nav">
+        <a href="gioi-thieu.html">Giới thiệu</a>
+        <a href="lien-he.html">Liên hệ</a>
+        <a href="https://www.facebook.com/share/1Arh91NyZb/?mibextid=wwXIfr/" target="_blank" rel="noopener">Fanpage Đội TNXK</a>
+        <a href="https://www.facebook.com/share/18B4nfBXqF/" target="_blank" rel="noopener">Fanpage Đoàn trường</a>
+        <a href="404.html">Trang lỗi (demo)</a>
+        <a href="admin-login.html" class="admin-footer-link">Đăng nhập</a>
+      </nav>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="back-to-top" aria-label="Quay về đầu trang">↑</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="data/sample-data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/lien-he.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Quản lý Sự kiện</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Quản lý Sự kiện</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <!-- =====================================================
+         FORM TẠO SỰ KIỆN MỚI
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Tạo sự kiện mới</h2>
+
+      <form id="addEventForm" class="admin-form">
+        <label for="newTitle">Tên sự kiện <span class="required">*</span></label>
+        <input type="text" id="newTitle" placeholder="VD: Mùa hè xanh 2026" required />
+
+        <label for="newDate">Ngày giờ diễn ra <span class="required">*</span></label>
+        <input type="datetime-local" id="newDate" required />
+
+        <label for="newLocation">Địa điểm</label>
+        <input type="text" id="newLocation" placeholder="VD: Sân trường A" />
+
+        <label for="newDescription">Mô tả</label>
+        <textarea id="newDescription" rows="3" placeholder="Nội dung, thời gian tập trung..."></textarea>
+
+        <label for="newImage">Ảnh sự kiện (không bắt buộc, chọn được nhiều ảnh)</label>
+        <input type="file" id="newImage" accept="image/*" multiple />
+
+        <label>Nội dung chi tiết (hiển thị khi bấm xem chi tiết, thêm từng khối chữ/ảnh theo đúng thứ tự mong muốn)</label>
+        <div class="content-blocks-editor" id="newContentBlocksEditor">
+          <div class="content-blocks-list"></div>
+          <div class="content-blocks-toolbar">
+            <button type="button" class="btn btn-outline-dark btn-add-text-block">+ Thêm khối chữ</button>
+            <label class="btn btn-outline-dark btn-add-image-block-label">
+              + Thêm khối ảnh
+              <input type="file" accept="image/*" multiple class="btn-add-image-block-input" hidden />
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="addBtn">+ Tạo sự kiện</button>
+      </form>
+
+      <p id="addMessage" class="admin-message" hidden></p>
+    </section>
+
+    <!-- =====================================================
+         DANH SÁCH SỰ KIỆN (sửa/xóa + xem ai đã đăng ký)
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Danh sách sự kiện</h2>
+
+      <div id="eventsAdminList" class="admin-positions-list">
+        <p class="loading-text">Đang tải danh sách...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+  <script src="js/image-picker.js"></script>
+  <script src="js/content-blocks-editor.js"></script>
+  <script src="js/admin-events.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Quản lý Tin tức</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Quản lý Tin tức</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <!-- =====================================================
+         FORM ĐĂNG TIN MỚI
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Đăng tin mới</h2>
+
+      <form id="addNewsForm" class="admin-form">
+        <label for="newCategory">Danh mục <span class="required">*</span></label>
+        <input type="text" id="newCategory" placeholder="VD: Hoạt động, Thành tích..." required />
+
+        <label for="newTitle">Tiêu đề <span class="required">*</span></label>
+        <input type="text" id="newTitle" placeholder="Tiêu đề bài viết" required />
+
+        <label for="newIcon">Icon (emoji, không bắt buộc)</label>
+        <input type="text" id="newIcon" placeholder="VD: 📰 (dán emoji vào đây)" maxlength="4" />
+
+        <label for="newExcerpt">Mô tả ngắn</label>
+        <textarea id="newExcerpt" rows="3" placeholder="Tóm tắt nội dung bài viết..."></textarea>
+
+        <label for="newAuthor">Người đăng</label>
+        <input type="text" id="newAuthor" placeholder="VD: Ban truyền thông" />
+
+        <label for="newImage">Ảnh đại diện / thư viện ảnh (không bắt buộc, chọn được nhiều ảnh cùng lúc)</label>
+        <input type="file" id="newImage" accept="image/*" multiple />
+
+        <label>Nội dung chi tiết bài viết (hiển thị ở trang chi tiết, thêm từng khối chữ/ảnh theo đúng thứ tự mong muốn)</label>
+        <div class="content-blocks-editor" id="newContentBlocksEditor">
+          <div class="content-blocks-list"></div>
+          <div class="content-blocks-toolbar">
+            <button type="button" class="btn btn-outline-dark btn-add-text-block">+ Thêm khối chữ</button>
+            <label class="btn btn-outline-dark btn-add-image-block-label">
+              + Thêm khối ảnh
+              <input type="file" accept="image/*" multiple class="btn-add-image-block-input" hidden />
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="addBtn">+ Đăng tin</button>
+      </form>
+
+      <p id="addMessage" class="admin-message" hidden></p>
+    </section>
+
+    <!-- =====================================================
+         DANH SÁCH TIN TỨC (sửa/xóa được trực tiếp)
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Danh sách tin tức</h2>
+      <p class="admin-hint">
+        💡 Sửa trực tiếp trong ô rồi bấm "Lưu" ở đúng dòng đó. Muốn đổi ảnh, chọn file mới rồi bấm "Lưu".
+      </p>
+
+      <!-- Nội dung bên trong do JS render từ bảng news_posts trong Supabase -->
+      <div id="newsAdminList" class="admin-positions-list">
+        <p class="loading-text">Đang tải danh sách...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+  <script src="js/image-picker.js"></script>
+  <script src="js/content-blocks-editor.js"></script>
+  <script src="js/admin-news.js"></script>
+</body>
+</html>

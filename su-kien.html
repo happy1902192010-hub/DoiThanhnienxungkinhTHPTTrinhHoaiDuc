@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Sự kiện</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/LOGO-ĐTNXK-favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo-link">
+        <img src="assets/LOGO-ĐTNXK.png" alt="Logo Đội TNXK" class="logo-img" />
+        <span class="site-name">
+          Đội TNXK
+          <small class="slogan">Xung kích - Sáng tạo - Đoàn kết</small>
+        </span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Mở menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-list">
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="gioi-thieu.html">Giới thiệu</a></li>
+          <li><a href="chi-huy-qua-cac-nhiem-ky.html">Các đời chỉ huy</a></li>
+          <li><a href="co-cau-to-chuc.html">Cơ cấu tổ chức</a></li>
+          <li><a href="tin-tuc.html">Tin tức</a></li>
+          <li><a href="su-kien.html" class="active">Sự kiện</a></li>
+          <li><a href="thu-vien.html">Thư viện ảnh</a></li>
+          <li><a href="lien-he.html">Liên hệ</a></li>
+          <li class="auth-control" id="authControl">
+            <a href="admin-login.html" class="login-link" id="loginLink">Đăng nhập</a>
+          </li>
+        </ul>
+
+        <form class="search-form" id="searchForm" role="search">
+          <input type="search" id="searchInput" name="q" placeholder="Tìm kiếm tin tức..." aria-label="Tìm kiếm tin tức" />
+          <button type="submit" aria-label="Tìm kiếm">🔍</button>
+        </form>
+
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1>Sự kiện & Lịch hoạt động</h1>
+    </div>
+  </section>
+
+  <main class="container">
+    <section class="section" aria-labelledby="events-heading">
+      <h2 id="events-heading" class="section-title">Sự kiện sắp diễn ra</h2>
+
+      <!-- Nội dung bên trong do JS lấy từ Supabase (bảng events),
+           mỗi sự kiện có nút "Đăng ký tham gia" mở ra 1 form nhỏ -->
+      <div id="eventsList" class="events-list">
+        <p class="loading-text">Đang tải sự kiện...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> Đội Thanh Niên Xung Kích. Mọi quyền được bảo lưu.</p>
+      <nav class="footer-nav">
+        <a href="gioi-thieu.html">Giới thiệu</a>
+        <a href="lien-he.html">Liên hệ</a>
+        <a href="https://www.facebook.com/share/1Arh91NyZb/?mibextid=wwXIfr/" target="_blank" rel="noopener">Fanpage Đội TNXK</a>
+        <a href="https://www.facebook.com/share/18B4nfBXqF/" target="_blank" rel="noopener">Fanpage Đoàn trường</a>
+        <a href="404.html">Trang lỗi (demo)</a>
+        <a href="admin-login.html" class="admin-footer-link">Đăng nhập</a>
+      </nav>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="back-to-top" aria-label="Quay về đầu trang">↑</button>
+
+  <!-- Khung phóng to ảnh (lightbox) — dùng chung, xử lý bằng
+       openLightbox()/initLightbox() trong js/main.js -->
+  <div id="lightbox" class="lightbox" hidden>
+    <button id="lightboxPrev" class="lightbox-nav lightbox-prev" aria-label="Ảnh trước">‹</button>
+    <button id="lightboxClose" class="lightbox-close" aria-label="Đóng">✕</button>
+    <img id="lightboxImg" src="" alt="" class="lightbox-img" />
+    <button id="lightboxNext" class="lightbox-nav lightbox-next" aria-label="Ảnh sau">›</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="data/sample-data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/su-kien.js"></script>
+</body>
+</html>

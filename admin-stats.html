@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Thống kê</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Thống kê</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <!-- =====================================================
+         SỐ LIỆU TỔNG QUAN — đếm tự động từ database, KHÔNG
+         phải số liệu gõ tay, nên luôn đúng thực tế
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Số liệu tổng quan</h2>
+
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <span class="stat-icon">👤</span>
+          <span class="stat-number" id="statMembers">...</span>
+          <span class="stat-label">Thành viên</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📰</span>
+          <span class="stat-number" id="statNews">...</span>
+          <span class="stat-label">Tin tức</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📅</span>
+          <span class="stat-number" id="statEvents">...</span>
+          <span class="stat-label">Sự kiện</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📝</span>
+          <span class="stat-number" id="statRegistrations">...</span>
+          <span class="stat-label">Lượt đăng ký sự kiện</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🖼️</span>
+          <span class="stat-number" id="statGallery">...</span>
+          <span class="stat-label">Ảnh trong thư viện</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         QUẢN LÝ THÀNH VIÊN
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Quản lý thành viên</h2>
+
+      <form id="addMemberForm" class="admin-form">
+        <label for="newMemberName">Họ tên <span class="required">*</span></label>
+        <input type="text" id="newMemberName" required />
+
+        <label for="newMemberEmail">Email</label>
+        <input type="email" id="newMemberEmail" />
+
+        <label for="newMemberPhone">Số điện thoại</label>
+        <input type="tel" id="newMemberPhone" />
+
+        <button type="submit" class="btn btn-primary" id="addMemberBtn">+ Thêm thành viên</button>
+      </form>
+
+      <p id="addMemberMessage" class="admin-message" hidden></p>
+
+      <div id="membersList" class="admin-simple-list">
+        <p class="loading-text">Đang tải danh sách...</p>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         QUẢN LÝ THƯ VIỆN ẢNH
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Quản lý thư viện ảnh</h2>
+
+      <form id="addGalleryForm" class="admin-form">
+        <label for="newGalleryImage">Chọn ảnh <span class="required">*</span></label>
+        <input type="file" id="newGalleryImage" accept="image/*" required />
+
+        <label for="newGalleryCaption">Chú thích (không bắt buộc)</label>
+        <input type="text" id="newGalleryCaption" placeholder="VD: Chương trình mùa hè xanh 2026" />
+
+        <button type="submit" class="btn btn-primary" id="addGalleryBtn">+ Tải ảnh lên</button>
+      </form>
+
+      <p id="addGalleryMessage" class="admin-message" hidden></p>
+
+      <div id="galleryAdminGrid" class="gallery-admin-grid">
+        <p class="loading-text">Đang tải thư viện ảnh...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+  <script src="js/image-picker.js"></script>
+  <script src="js/admin-stats.js"></script>
+</body>
+</html>

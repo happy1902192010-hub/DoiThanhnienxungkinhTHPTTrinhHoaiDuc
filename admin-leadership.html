@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đội TNXK - Quản lý Các đời chỉ huy</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" />
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <a href="admin-dashboard.html" class="admin-back-link">← Dashboard</a>
+      <span class="admin-header-title">Quản lý Các đời chỉ huy</span>
+      <div class="admin-header-right">
+        <a href="index.html" class="admin-back-link">🌐 Xem trang web</a>
+        <button class="btn btn-outline-dark" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-main">
+
+    <!-- =====================================================
+         FORM THÊM NHIỆM KỲ MỚI
+         ---------------------------------------------------
+         CẬP NHẬT QUAN TRỌNG: 1 "Nhiệm kỳ" giờ là 1 thực thể
+         RIÊNG (có tên + thời gian + ẢNH RIÊNG do Admin tự
+         upload — ảnh này dùng để hiện card ở trang Giới thiệu).
+         KHÔNG còn ô "Tên chỉ huy trưởng" ở đây nữa — thêm chỉ
+         huy làm ở PHẦN DƯỚI, bên trong từng nhiệm kỳ đã tạo.
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Thêm nhiệm kỳ mới</h2>
+      <p class="admin-hint">
+        💡 Tạo nhiệm kỳ trước (VD: "Nhiệm kỳ I", "2026-2027"), sau đó
+        bấm vào nhiệm kỳ vừa tạo ở danh sách bên dưới để thêm từng
+        chỉ huy (Đội trưởng, Đội phó...) vào bên trong.
+      </p>
+
+      <form id="addTermForm" class="admin-form">
+        <label for="newTermName">Tên nhiệm kỳ <span class="required">*</span></label>
+        <input
+          type="text"
+          id="newTermName"
+          placeholder="VD: Nhiệm kỳ lâm thời, Nhiệm kỳ I..."
+          required
+        />
+
+        <label for="newPeriod">Khoảng thời gian</label>
+        <input type="text" id="newPeriod" placeholder="VD: 2024 - 2025" />
+
+        <label for="newTermImage">Ảnh đại diện nhiệm kỳ (hiện ở trang Giới thiệu)</label>
+        <input type="file" id="newTermImage" accept="image/*" />
+
+        <button type="submit" class="btn btn-primary" id="addTermBtn">+ Thêm nhiệm kỳ</button>
+      </form>
+
+      <p id="addTermMessage" class="admin-message" hidden></p>
+    </section>
+
+    <!-- =====================================================
+         DANH SÁCH NHIỆM KỲ — dạng accordion: mỗi nhiệm kỳ là 1
+         dòng có thể bấm mở ra để (1) sửa/xóa THÔNG TIN NHIỆM KỲ
+         và (2) xem/thêm/sửa/xóa từng CHỈ HUY trong nhiệm kỳ đó
+         (xem js/admin-leadership.js)
+         ===================================================== -->
+    <section class="admin-section">
+      <h2 class="section-title">Danh sách các đời chỉ huy</h2>
+      <p class="admin-hint">💡 Bấm vào tên 1 nhiệm kỳ để mở ra: sửa thông tin nhiệm kỳ, và quản lý danh sách chỉ huy bên trong.</p>
+
+      <div id="leadershipAdminList" class="admin-positions-list">
+        <p class="loading-text">Đang tải danh sách...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/admin-auth-guard.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+  <script src="js/image-picker.js"></script>
+  <script src="js/admin-leadership.js"></script>
+</body>
+</html>
